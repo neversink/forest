@@ -24,9 +24,9 @@ xAxis:{gridLineColor:"#505053"}},scrollbar:{barBackgroundColor:"#808083",barBord
 
 
 // ui
-import MuseUI from 'muse-ui'
-import 'muse-ui/dist/muse-ui.css'
-Vue.use(MuseUI)
+// import MuseUI from 'muse-ui'
+// import 'muse-ui/dist/muse-ui.css'
+// Vue.use(MuseUI)
 
 import Vuetify from 'vuetify'
 import 'vuetify/dist/vuetify.min.css'
@@ -47,7 +47,7 @@ import { Field } from 'vant';
 import { Cell, CellGroup } from 'vant';
 import { Uploader } from 'vant';
 import { Lazyload } from 'vant';
-
+import { Toast } from 'vant';
 
 
 
@@ -62,6 +62,7 @@ Vue.use(Field);
 Vue.use(Cell).use(CellGroup);
 Vue.use(Uploader);
 Vue.use(Lazyload);
+Vue.use(Toast);
 
 
 

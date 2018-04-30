@@ -136,8 +136,17 @@ export default {
 
 </script>
 <style scoped>
+.application.theme--light {
+  background-image: url(../assets/img/plane.jpg);
+}
+
+.application .theme--light.card,
+.theme--light .card {
+  background-color: rgba(0, 0, 0, .3);
+}
+
 .main-container {
-  background-image: url(/static/img/plane.jpg);
+  background-image: url(../assets/img/plane.jpg);
   background-size: cover;
 }
 

@@ -1,18 +1,18 @@
 <template>
   <div class="main-container">
-    <mu-refresh-control :refreshing="refreshing" :trigger="trigger" @refresh="refresh" />
+    <!-- <mu-refresh-control :refreshing="refreshing" :trigger="trigger" @refresh="refresh" /> -->
     <van-swipe :autoplay="3000" class="swipe">
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/docks.jpg'" />
+        <img class="swipe-item" src="../assets/img/docks.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/section.jpg'" />
+        <img class="swipe-item" src="../assets/img/section.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/sunshine.jpg'" />
+        <img class="swipe-item" src="../assets/img/sunshine.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/house.jpg'" />
+        <img class="swipe-item" src="../assets/img/house.jpg" />
       </van-swipe-item>
     </van-swipe>
     <v-card color="grey darken-3">
@@ -38,7 +38,7 @@
         </v-layout>
       </v-container>
     </v-card>
-    <mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore" style="color:white" loadingText="正在加载"></mu-infinite-scroll>
+    <!-- <mu-infinite-scroll :scroller="scroller" :loading="loading" @load="loadMore" style="color:white" loadingText="正在加载"></mu-infinite-scroll> -->
   </div>
 </template>
 <script>

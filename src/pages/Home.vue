@@ -2,16 +2,16 @@
   <div class="main-container">
     <van-swipe :autoplay="3000" class="swipe">
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/house.jpg'" />
+        <img class="swipe-item" src="../assets/img/house.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/plane.jpg'" />
+        <img class="swipe-item"  src="../assets/img/plane.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/section.jpg'" />
+        <img class="swipe-item"  src="../assets/img/section.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" v-lazy="'/static/img/sunshine.jpg'" />
+        <img class="swipe-item"  src="../assets/img/sunshine.jpg" />
       </van-swipe-item>
     </van-swipe>
     <div class="index-num-content">

@@ -30,7 +30,9 @@
                 <v-list-tile-sub-title class="caption" style="color:white">{{i.subtitle}}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
-                <span class="body-2 grey-text">{{i.action}}</span>
+                <v-btn flat @click.native="click_action(i.title,i.action)">
+                  <span class="body-2 grey-text">{{i.action}}</span>
+                </v-btn>
               </v-list-tile-action>
             </v-list-tile>
             <v-divider dark inset v-if="index2 + 1< item.content.length" :key="index2"></v-divider>
@@ -112,13 +114,13 @@ export default {
               action: '在线咨询',
             }, {
               icon: 'mdi-at',
-              title: '咨询邮箱',
+              title: '邮件咨询',
               subtitle: 'forest@forest.com',
               action: '发送邮件',
             },
             {
               icon: 'mdi-phone-in-talk',
-              title: '咨询电话',
+              title: '电话咨询',
               subtitle: '123456',
               action: '拨打电话',
             }, {
@@ -129,9 +131,7 @@ export default {
             },
           ],
         },
-
       },
-
     }
   },
   computed: {
@@ -143,15 +143,31 @@ export default {
   methods: {
     onRead(file) {
       console.log(file)
+    },
+    click_action(type, action) {
+      console.log(type, action)
+      switch (type) {
+        case '邮件咨询':
+          console.log('this')
+          window.location.href = "mailto:forest@forest.com"
+          break;
+        case '电话咨询':
+          window.location.href = "tel:123456"
+          break;
+      }
     }
   }
 };
 
 </script>
 <style scoped>
+.application .theme--light.list,
+.theme--light .list {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
 .list-background {
   background-color: rgba(0, 0, 0, 0.3);
-  /*background-color: white;*/
 }
 
 .main-container {

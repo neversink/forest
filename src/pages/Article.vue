@@ -4,7 +4,7 @@
       <v-btn icon @click="goback">
         <v-icon color="amber lighten-3">navigate_before</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="'资讯'" style="color:#FFE082;"></v-toolbar-title>
+      <v-toolbar-title v-text="'资讯'" style="color:#FFE082;fontSize:16px;"></v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn icon @click.native="()=>{is_like = !is_like}">
         <v-icon :color="is_like ?'red' : 'amber lighten-3' ">favorite</v-icon>
@@ -15,7 +15,7 @@
     </v-toolbar>
     <v-content>
       <section>
-        <v-parallax src="/static/img/plane.jpg" height="200">
+        <v-parallax src="./static/img/plane.jpg" height="200">
           <v-layout column align-center justify-center class="white--text">
             <h1 class="white--text mb-2  text-xs-center">{{article.title}}</h1>
             <div class="subheading mb-3 text-xs-center">{{article.memo}}</div>

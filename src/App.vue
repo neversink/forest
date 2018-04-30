@@ -25,11 +25,25 @@ export default {
 
 </script>
 <style>
+
+.gold-text {
+  color: #FFECB3;
+}
+
+
 body {
   font-size: 16px;
-  background-color: #f8f8f8;
   -webkit-font-smoothing: antialiased;
   background-color: #212121;
+}
+
+.main-container {
+  background-color: #212121;
+}
+
+.application .theme--light.list,
+.theme--light .list {
+  background-color: rgba(0, 0, 0, 0.87);
 }
 
 .slide-left-enter-active,

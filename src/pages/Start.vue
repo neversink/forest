@@ -1,5 +1,5 @@
 <template>
-  <v-app class="main-container">
+  <v-app class="main-container" style="background-color: #212121;">
     <v-content>
       <transition :name="transitionName" mode="out-in">
       <!-- <transition name="slide-fade" mode="out-in"> -->
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       transitionName: 'slide-left',
-      current_tab: 0,
+      current_tab: 1,
       tabs: [{
           name: '首页',
           icon: 'home',
@@ -95,6 +95,11 @@ export default {
 <style scoped>
 .main-container {
   background-color: #212121;
+}
+
+.application .theme--light.list,
+.theme--light .list {
+  background-color: rgba(0, 0, 0, 0.87);
 }
 
 .fade-enter-active,
