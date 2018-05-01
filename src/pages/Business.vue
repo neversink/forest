@@ -221,7 +221,7 @@ export default {
   name: 'Business',
   data() {
     return {
-
+      activated_tab: "0",
       max_amount: 9999,
       amount: 0,
 
@@ -266,7 +266,7 @@ export default {
         { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', time: '30', atleast: '5000', expmoney: 'yes' },
         { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', time: '7', atleast: '10000', expmoney: 'yes' }
       ],
-      activated_tab: "1",
+
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     }
   },
@@ -284,7 +284,7 @@ export default {
     real_buy() {
       this.is_loading = true;
       setTimeout(() => {
-        this.$toast('投入【' + this.current_item.type +'】成功');
+        this.$toast('投入【' + this.current_item.type + '】成功');
         this.is_loading = false;
         this.show_dialog = false;
       }, 2000);

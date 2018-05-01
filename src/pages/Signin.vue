@@ -15,13 +15,13 @@
               <v-tab-item :id="'tab-' + i" class="input-content" v-for="i in 2" :key="i">
                 <v-layout row wrap align-center justify-center>
                   <v-flex xs11>
-                    <v-text-field :error="username_error" v-if="i == 1" :rules="[rules.required,rules.phonenumber,]" dark clearable color="amber lighten-4" name="" :label="'请输入手机号码'" v-model="username" class="input-content-username" key="phone"></v-text-field>
-                    <v-text-field :error="username_error" v-else :rules="[rules.required,rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="username" class="input-content-username" key="email"></v-text-field>
-                    <v-text-field :error="password_error" :rules="[rules.required,]" dark color="amber lighten-4" name="" label="请输入用户密码" v-model="password" class="input-content-password" :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="change_password_visible" :type="e1 ? 'password' : 'text'"></v-text-field>
+                    <v-text-field  :disabled="is_loading" :error="username_error" v-if="i == 1" :rules="[rules.required,rules.phonenumber,]" dark clearable color="amber lighten-4" name="" :label="'请输入手机号码'" v-model="username" class="input-content-username" key="phone"></v-text-field>
+                    <v-text-field :disabled="is_loading" :error="username_error" v-else :rules="[rules.required,rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="username" class="input-content-username" key="email"></v-text-field>
+                    <v-text-field :disabled="is_loading" :error="password_error" :rules="[rules.required,]" dark color="amber lighten-4" name="" label="请输入用户密码" v-model="password" class="input-content-password" :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="change_password_visible" :type="e1 ? 'password' : 'text'"></v-text-field>
                   </v-flex>
                   <v-flex xs11 offset-xs7>
                     <v-spacer></v-spacer>
-                    <v-checkbox color="amber lighten-4" dark label="记住密码" v-model="checkbox"></v-checkbox>
+                    <v-checkbox :disabled="is_loading" color="amber lighten-4" dark label="记住密码" v-model="checkbox"></v-checkbox>
                   </v-flex>
                   <v-flex xs11>
                     <v-btn @click.native="signin" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>登录</v-btn>
@@ -81,7 +81,7 @@ export default {
         },
         phonenumber: (value) => {
           const pattern = /^[1][3,4,5,7,8][0-9]{9}$/;
-          if (pattern.test(value)) {
+          if (value == 'admin' || pattern.test(value)) {
             return true;
           } else {
             this.input_error = true;
@@ -112,7 +112,7 @@ export default {
         return;
       }
       setTimeout(() => {
-        if (this.username != '18750218018') {
+        if (this.username != 'admin' && this.username != '13400544025') {
           this.snackbar_text = '该用户尚未注册';
           this.snackbar = true;
           this.username_error = true;

@@ -2,26 +2,27 @@
   <div class="main-container">
     <van-swipe :autoplay="3000" class="swipe">
       <van-swipe-item>
-        <img class="swipe-item" src="../assets/img/house.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/house.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item"  src="../assets/img/plane.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/plane.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item"  src="../assets/img/section.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/section.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item"  src="../assets/img/sunshine.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/sunshine.jpg" />
       </van-swipe-item>
     </van-swipe>
     <div class="index-num-content">
-    <van-notice-bar @click="click_notice" class="notice-bar" :text="notice_text" left-icon="http://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png" />
+      <van-notice-bar @click="click_notice" class="notice-bar" :text="notice_text" left-icon="http://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png" />
       <!-- <span class="index-num">指数</span> -->
       <div class="coin-info">
         <template v-for="coin in coins">
           <div class="coin-item" :key="coin.type">
             <span class="body-2 coin-type">{{coin.type}}</span>
-            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}">{{coin.price}}</span><v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
+            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}">{{coin.price}}</span>
+            <v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
             <span class="subheading coin-somewhat">{{coin.somewhat}}</span>
           </div>
         </template>
@@ -57,7 +58,7 @@ export default {
   data() {
     return {
       activated_tab: 'tab-1',
-      notice_text:'32MB区块即将到来，BCH定于5月15日进行硬分叉，BCH网络将实现历史上最大的区块大小增长。',
+      notice_text: '32MB区块即将到来，BCH定于5月15日进行硬分叉，BCH网络将实现历史上最大的区块大小增长。',
       pagination: {
         sortBy: 'percent',
         descending: true,
@@ -75,61 +76,61 @@ export default {
       ],
       items: [{
           value: true,
-          type: 'Frozen Yogurt',
+          type: 'BTC',
           price: 159,
           percent: +1
         },
         {
           value: false,
-          type: 'Ice cream sandwich',
+          type: 'ETH',
           price: 237,
           percent: -1
         },
         {
           value: false,
-          type: 'Eclair',
+          type: 'BTS',
           price: 262,
           percent: +7
         },
         {
           value: false,
-          type: 'Cupcake',
+          type: 'BCH',
           price: 305,
           percent: +8
         },
         {
           value: false,
-          type: 'Gingerbread',
+          type: 'XRP',
           price: 356,
           percent: -16
         },
         {
           value: false,
-          type: 'Jelly bean',
+          type: 'LTC',
           price: 375,
           percent: +0
         },
         {
           value: false,
-          type: 'Lollipop',
+          type: 'ETC',
           price: 392,
           percent: -2
         },
         {
           value: false,
-          type: 'Honeycomb',
+          type: 'EOS',
           price: 408,
           percent: +45
         },
         {
           value: false,
-          type: 'Donut',
+          type: 'ANT',
           price: 452,
           percent: -22
         },
         {
           value: false,
-          type: 'KitKat',
+          type: 'RIP',
           price: 518,
           percent: 6
         }
@@ -162,13 +163,24 @@ export default {
     },
     click_notice() {
       console.log('this')
-    }
+    },
+    goto_href(href) {
+      if (!href) {
+        this.$router.push({
+          name: 'Article'
+        })
+      } else {
+        this.$router.push({
+          name: href
+        })
+      }
+    },
   }
 }
 
 </script>
 <style scoped>
-.main-container{
+.main-container {
   background-color: #212121;
 }
 
@@ -222,12 +234,13 @@ export default {
 }
 
 .notice-bar {
-  color:#FFE082;
+  color: #FFE082;
   /*color: #BDBDBD;*/
   background-color: #424242;
 }
 
-::-webkit-scrollbar{
-  display:none;
+::-webkit-scrollbar {
+  display: none;
 }
+
 </style>

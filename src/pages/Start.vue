@@ -2,7 +2,7 @@
   <v-app class="main-container" style="background-color: #212121;">
     <v-content>
       <transition :name="transitionName" mode="out-in">
-      <!-- <transition name="slide-fade" mode="out-in"> -->
+        <!-- <transition name="slide-fade" mode="out-in"> -->
         <router-view></router-view>
       </transition>
     </v-content>
@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       transitionName: 'slide-left',
-      current_tab: 1,
+      current_tab: +window.sessionStorage.hometab || 0,
       tabs: [{
           name: '首页',
           icon: 'home',
@@ -66,6 +66,7 @@ export default {
     },
     current_tab: {
       handler: function(n, o) {
+        window.sessionStorage.hometab = n;
         this.$router.push({
           name: this.tabs[n].href
         });

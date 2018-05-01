@@ -3,16 +3,16 @@
     <!-- <mu-refresh-control :refreshing="refreshing" :trigger="trigger" @refresh="refresh" /> -->
     <van-swipe :autoplay="3000" class="swipe">
       <van-swipe-item>
-        <img class="swipe-item" src="../assets/img/docks.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/docks.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" src="../assets/img/section.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/section.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" src="../assets/img/sunshine.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/sunshine.jpg" />
       </van-swipe-item>
       <van-swipe-item>
-        <img class="swipe-item" src="../assets/img/house.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/house.jpg" />
       </van-swipe-item>
     </van-swipe>
     <v-card color="grey darken-3">
@@ -78,10 +78,15 @@ export default {
       'getDatas',
     ]),
     goto_href(href) {
-      console.log(href)
-      this.$router.push({
-        name: href
-      })
+      if (!href) {
+        this.$router.push({
+          name: 'Article'
+        })
+      } else {
+        this.$router.push({
+          name: href
+        })
+      }
     },
     refresh() {
       this.refreshing = true
