@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import store from './store';
 import axios from 'axios'
+import 'babel-polyfill'
 
 // others
 import Highcharts from 'highcharts';
