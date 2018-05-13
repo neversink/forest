@@ -81,8 +81,8 @@
                         <v-flex xs12 class="title gold-text">{{i.type}} </v-flex>
                         <v-flex xs6 class="caption grey-text py-0">预期年化率</v-flex>
                         <v-flex xs6 class="caption grey-text py-0">剩余抢购时间</v-flex>
-                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{'+' + i.benefit_add + '%'}}</span></v-flex>
-                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>天</v-flex>
+                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex>
+                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.time}}</span>天</v-flex>
                         <v-flex xs12 class="gold-text py-0">
                           <v-chip v-if="i.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
                           <v-chip v-if="i.atleast" small color="amber lighten-4" text-color="grey darken-4">{{i.atleast}}起投</v-chip>
@@ -113,7 +113,7 @@
                         <v-flex xs12 class="title gold-text">{{i.type}} </v-flex>
                         <v-flex xs6 class="caption grey-text py-0">预期年化率</v-flex>
                         <v-flex xs6 class="caption grey-text py-0">剩余抢购时间</v-flex>
-                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{'+' + i.benefit_add + '%'}}</span></v-flex>
+                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex>
                         <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>天</v-flex>
                         <v-flex xs12 class="gold-text py-0">
                           <v-chip v-if="i.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
@@ -145,7 +145,7 @@
                         <v-flex xs12 class="title gold-text">{{i.type}} </v-flex>
                         <v-flex xs6 class="caption grey-text py-0">预期年化率</v-flex>
                         <v-flex xs6 class="caption grey-text py-0">剩余抢购时间</v-flex>
-                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{'+' + i.benefit_add + '%'}}</span></v-flex>
+                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex>
                         <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>天</v-flex>
                         <v-flex xs12 class="gold-text py-0">
                           <v-chip v-if="i.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
@@ -181,7 +181,7 @@
               <v-flex xs12 class="title gold-text">{{current_item.type}} </v-flex>
               <v-flex xs6 class="caption grey-text py-0">预期年化率</v-flex>
               <v-flex xs6 class="caption grey-text py-0">剩余抢购时间</v-flex>
-              <v-flex xs6 class="gold-text py-0"><span class="display-1">{{current_item.benefit}}</span>%<span v-if="current_item.benefit_add">{{'+' + current_item.benefit_add + '%'}}</span></v-flex>
+              <v-flex xs6 class="gold-text py-0"><span class="display-1">{{current_item.benefit}}</span>%<span v-if="current_item.benefit_add">{{current_item.benefit_add_type + current_item.benefit_add + '%'}}</span></v-flex>
               <v-flex xs6 class="gold-text py-0"><span class="display-1">{{current_item.benefit}}</span>天</v-flex>
               <v-flex xs12 class="gold-text py-0">
                 <v-chip v-if="current_item.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
@@ -217,6 +217,8 @@
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'Business',
   data() {
@@ -253,18 +255,18 @@ export default {
         { type: '杠杆', proportion: '22.3%', conceive: '5000', amount: '1250' }
       ],
       entrusts: [
-        { type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', time: '7', atleast: '1000', expmoney: 'yes' },
-        { type: '向日葵90天方案', benefit: '7', benefit_add: '1', time: '90', atleast: '1000', expmoney: 'no' },
-        { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', time: '30', atleast: '5000', expmoney: 'yes' },
-        { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', time: '7', atleast: '10000', expmoney: 'yes' },
-        { type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', time: '7', atleast: '1000', expmoney: 'yes' },
-        { type: '向日葵90天方案', benefit: '7', benefit_add: '1', time: '90', atleast: '1000', expmoney: 'no' },
-        { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', time: '30', atleast: '5000', expmoney: 'yes' },
-        { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', time: '7', atleast: '10000', expmoney: 'yes' },
-        { type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', time: '7', atleast: '1000', expmoney: 'yes' },
-        { type: '向日葵90天方案', benefit: '7', benefit_add: '1', time: '90', atleast: '1000', expmoney: 'no' },
-        { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', time: '30', atleast: '5000', expmoney: 'yes' },
-        { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', time: '7', atleast: '10000', expmoney: 'yes' }
+        { type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', benefit_add_type: '+', time: '7', atleast: '1000', expmoney: 'yes' },
+        { type: '向日葵90天方案', benefit: '7', benefit_add: '1', benefit_add_type: '+', time: '90', atleast: '1000', expmoney: 'no' },
+        { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', time: '30', atleast: '5000', expmoney: 'yes' },
+        { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', time: '7', atleast: '10000', expmoney: 'yes' },
+        { type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', benefit_add_type: '+', time: '7', atleast: '1000', expmoney: 'yes' },
+        { type: '向日葵90天方案', benefit: '7', benefit_add: '1', benefit_add_type: '+', time: '90', atleast: '1000', expmoney: 'no' },
+        { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', time: '30', atleast: '5000', expmoney: 'yes' },
+        { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', time: '7', atleast: '10000', expmoney: 'yes' },
+        { type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', benefit_add_type: '+', time: '7', atleast: '1000', expmoney: 'yes' },
+        { type: '向日葵90天方案', benefit: '7', benefit_add: '1', benefit_add_type: '+', time: '90', atleast: '1000', expmoney: 'no' },
+        { type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', time: '30', atleast: '5000', expmoney: 'yes' },
+        { type: '木棉花7天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', time: '7', atleast: '10000', expmoney: 'yes' }
       ],
 
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
@@ -274,12 +276,55 @@ export default {
 
   },
   created() {
+    this.getWallet({
+      ID: 'test@sina.com'
+    }).then(response => {
+      if (response.data.Result.Status == 0) {
+
+      } else {
+
+      }
+    }).catch(error => {
+
+    });
+    this.getAvailableEntrustList().then(response => {
+      if (response.data.Result.Status == 0) {
+        let temp_entrusts = response.data.EnstustItems.map(item => {
+          return {
+            type: item.Name,
+            benefit: item.Earn,
+            benefit_add: item.OffsetEarn,
+            benefit_add_type: item.OffsetPlus == 1 ? '+' : (item.OffsetPlus == 2 ? '-' : '±'),
+            time: item.Expires,
+            atleast: item.BaseLine,
+            expmoney: 'no',
+          }
+        })
+        this.entrusts = temp_entrusts;
+      } else {
+
+      }
+    }).catch(error => {
+
+    });
 
   },
   methods: {
+    ...mapActions('business', [
+      'getWallet', 'getAvailableEntrustList', 'getEntrustDetail'
+    ]),
     wanna_buy(i) {
       this.current_item = i;
       this.show_dialog = true;
+      this.getEntrustDetail().then(response => {
+        if (response.data.Result.Status == 0) {
+
+        } else {
+
+        }
+      }).catch(error => {
+
+      });
     },
     real_buy() {
       this.is_loading = true;

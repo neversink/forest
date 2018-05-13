@@ -1,53 +1,54 @@
-import * as types from '../mutation-types.js';
+import api from '../../api';
+import * as types from '../mutation-types.js';;
 
 const state = {
-  idlist: [], // 前十天的图文 id
-  nodes: [], // 首页文章列表
-  hp: {}, // 最新的图文
-  todaydate: '', // 今天的日期
-  climate: '', // 副标题
-  poster: {} , // 海报
+  idlist: [],
 }
 
 const getters = {
   idlist: state => state.idlist,
-  todaydate: state => state.todaydate,
-  climate: state => state.climate,
-  poster: state => state.poster,
-  nodes: state => state.nodes
 }
 
 const actions = {
-  getIdlist ({ dispatch, commit, state }) {
-
-  },
-  getHpById ({ dispatch, commit, state }, id) {
-    serve.getHpById(id).then(response => {
-      let hp = response.data.data;
-      commit(types.RECEIVE_HP, hp);
-      dispatch('weather', hp);
+  bindTelOrEmail({ dispatch, commit, state }, id) {
+    return api.bindTelOrEmail().then(response => {
+      commit(types.BIND_TEL_OR_EMAIL, { response });
+      return response;
     });
   },
-  weather ({ commit }, hp) {
-    commit(types.WEATHER, hp);
-  }
+  changePassword({ dispatch, commit, state }, id) {
+    return api.changePassword().then(response => {
+      commit(types.CHANGE_PASSWORD, { response });
+      return response;
+    });
+  },
+  certify({ dispatch, commit, state }, id) {
+    return api.certify().then(response => {
+      commit(types.CERTIFY, { response });
+      return response;
+    });
+  },
+  advancedCertify({ dispatch, commit, state }, id) {
+    return api.advancedCertify().then(response => {
+      commit(types.ADVANCED_CERTIFY, { response });
+      return response;
+    });
+  },
 }
 
 const mutations = {
-  [types.RECEIVE_IDLIST] (state, data) {
-    state.idlist = data;
+  [types.BIND_TEL_OR_EMAIL](state, data) {
+
   },
-  [types.RECEIVE_HP] (state, data) {
-    state.hp = data;
-    // 文章列表
-    state.nodes = data.content_list;
-    //获取最新一天的海报
-    state.poster = data.content_list[0];
+  [types.CHANGE_PASSWORD](state, data) {
+
   },
-  [types.WEATHER] (state, hp) {
-    state.todaydate = hp.weather.date;
-    state.climate = hp.weather.climate + ', ' + hp.weather.city_name;
-  }
+  [types.CERTIFY](state, data) {
+
+  },
+  [types.ADVANCED_CERTIFY](state, data) {
+
+  },
 }
 
 export default {

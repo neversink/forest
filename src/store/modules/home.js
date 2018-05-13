@@ -1,52 +1,48 @@
+import api from '../../api';
 import * as types from '../mutation-types.js';
 
 const state = {
-  idlist: [], // 前十天的图文 id
-  nodes: [], // 首页文章列表
-  hp: {}, // 最新的图文
-  todaydate: '', // 今天的日期
-  climate: '', // 副标题
-  poster: {} , // 海报
+  notice:  {},
+  index:  {},
+  indexDetail: {},
 }
 
 const getters = {
-  idlist: state => state.idlist,
-  todaydate: state => state.todaydate,
-  climate: state => state.climate,
-  poster: state => state.poster,
-  nodes: state => state.nodes
+  notice: state => state.notice,
+  index: state => state.index,
+  indexDetail: state => state.indexDetail,
 }
 
 const actions = {
-  getIdlist ({ dispatch, commit, state }) {
-
-  },
-  getHpById ({ dispatch, commit, state }, id) {
-    serve.getHpById(id).then(response => {
-      let hp = response.data.data;
-      commit(types.RECEIVE_HP, hp);
-      dispatch('weather', hp);
+  getNotice({ dispatch, commit, state }, param) {
+    return api.getNotice(param).then(response => {
+      commit(types.REVEIVE_NOTICE, { response });
+      return response;
     });
   },
-  weather ({ commit }, hp) {
-    commit(types.WEATHER, hp);
-  }
+  getIndex({ dispatch, commit, state }, param) {
+    return api.getIndex().then(response => {
+       commit(types.REVEIVE_INDEX, { response });
+       return response;
+    });
+  },
+  getIndexDetail({ dispatch, commit, state }, param) {
+    return api.getIndexDetail(param).then(response => {
+      commit(types.REVEIVE_INDEX_DETAIL, { response });
+      return response;
+    });
+  },
 }
 
 const mutations = {
-  [types.RECEIVE_IDLIST] (state, data) {
-    state.idlist = data;
+  [types.REVEIVE_NOTICE](state, data) {
+    state.notice = data;
   },
-  [types.RECEIVE_HP] (state, data) {
-    state.hp = data;
-    // 文章列表
-    state.nodes = data.content_list;
-    //获取最新一天的海报
-    state.poster = data.content_list[0];
+  [types.REVEIVE_INDEX](state, data) {
+    state.index = data;
   },
-  [types.WEATHER] (state, hp) {
-    state.todaydate = hp.weather.date;
-    state.climate = hp.weather.climate + ', ' + hp.weather.city_name;
+  [types.REVEIVE_INDEX_DETAIL](state, data) {
+    state.indexDetail = data;
   }
 }
 

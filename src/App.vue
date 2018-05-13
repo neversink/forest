@@ -17,7 +17,6 @@ export default {
     '$route' (to, from) {
       const toDepth = to.meta.index
       const fromDepth = from.meta.index
-      console.log(toDepth, fromDepth)
       this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
     },
   }

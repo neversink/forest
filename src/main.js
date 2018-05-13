@@ -49,7 +49,7 @@ import { Cell, CellGroup } from 'vant';
 import { Uploader } from 'vant';
 import { Lazyload } from 'vant';
 import { Toast } from 'vant';
-
+import { Icon } from 'vant';
 
 
 Vue.use(Row).use(Col);
@@ -64,8 +64,7 @@ Vue.use(Cell).use(CellGroup);
 Vue.use(Uploader);
 Vue.use(Lazyload);
 Vue.use(Toast);
-
-
+Vue.use(Icon);
 
 
 Vue.config.productionTip = false;

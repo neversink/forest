@@ -44,6 +44,57 @@
           <v-btn block color="amber lighten-4" large replace :to="{name:'Signin'}">退出登录</v-btn>
         </v-flex>
       </v-layout>
+      <v-dialog v-model="show_dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
+        <v-card tile class="grey darken-4">
+          <v-toolbar class="grey darken-4" dark dense>
+            <v-btn icon @click.native="show_dialog = false" dark>
+              <v-icon color="amber lighten-3">close</v-icon>
+            </v-btn>
+            <v-toolbar-title v-text="'认证'" style="color:#FFE082;fontSize:16px;"></v-toolbar-title>
+            <v-spacer></v-spacer>
+          </v-toolbar>
+          <v-card-text>
+            <v-container fluid grid-list-md text-xs-center>
+              <v-layout row wrap justify-center>
+                <template v-if="confirm_type == 'base'">
+                  <v-flex xs11>
+                    <div class="subhead-container">
+                      <h2 class="subhead gold-text">身份认证</h2>
+                      <h3 class="subhead-detail"></h3>
+                    </div>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-text-field :disabled="is_loading" :error="name_error" :rules="[rules.name,]" dark clearable color="amber lighten-4" name="" :label="'请输入姓名'" v-model="name" class="input-content-username" key="name"></v-text-field>
+                    <v-text-field :disabled="is_loading" :error="idcard_error" :rules="[rules.idcard,]" dark clearable color="amber lighten-4" name="" :label="'请输入身份证号码'" v-model="idcard" class="input-content-username" key="idcard"></v-text-field>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-btn @click.native="base_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>认证</v-btn>
+                  </v-flex>
+                </template>
+                <template v-else>
+                  <v-flex xs11>
+                    <div class="subhead-container">
+                      <h2 class="subhead gold-text">高级认证</h2>
+                      <h3 class="subhead-detail"></h3>
+                    </div>
+                  </v-flex>
+                  <v-flex xs11>
+                    <van-uploader :after-read="onRead">
+                     <v-icon large color="blue-grey darken-2">camera</v-icon><span class="gold-text">点击选择图片</span>
+                    </van-uploader>
+                    <template v-for="(i, index) in upload_photos">
+                      <img src="i" :key="index">
+                    </template>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-btn @click.native="advance_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>认证</v-btn>
+                  </v-flex>
+                </template>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </div>
   </v-app>
 </template>
@@ -53,6 +104,14 @@ export default {
   data() {
     return {
       activde_tab: 0,
+      show_dialog: false,
+      name: '',
+      idcard: '',
+      is_loading: false,
+      name_error: false,
+      idcard_error: false,
+      confirm_type: '',
+      upload_photos: [],
       items: {
         sfrz_items: {
           title: '身份认证',
@@ -132,6 +191,22 @@ export default {
           ],
         },
       },
+      rules: {
+        name: (value) => {
+          if (!!value) {
+            return true;
+          } else {
+            return '必填项';
+          }
+        },
+        idcard: (value) => {
+          if (!!value) {
+            return true;
+          } else {
+            return '必填项';
+          }
+        },
+      }
     }
   },
   computed: {
@@ -142,11 +217,21 @@ export default {
   },
   methods: {
     onRead(file) {
+      this.upload_photos.push(file.content)
       console.log(file)
     },
     click_action(type, action) {
       console.log(type, action)
       switch (type) {
+        case '实名认证':
+          this.confirm_type = 'base';
+          this.show_dialog = true;
+          break;
+        case '高级认证':
+          this.upload_photos = [];
+          this.confirm_type = 'advance';
+          this.show_dialog = true;
+          break;
         case '邮件咨询':
           console.log('this')
           window.location.href = "mailto:forest@forest.com"
@@ -229,6 +314,10 @@ export default {
   width: 100px;
   height: 100px;
   border-radius: 100px
+}
+
+.input-content-username {
+  margin-top: 20px;
 }
 
 </style>

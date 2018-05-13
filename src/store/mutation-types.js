@@ -1,24 +1,24 @@
-export const FETCH_MARKET_INFO = 'FETCH_MARKET_INFO';
-export const REVEIVE_MARKET_INFO = 'REVEIVE_MARKET_INFO';
+  // 登录
+  export const LOGIN = 'LOGIN';
+  export const LOGOUT = 'LOGOUT';
+  // 注册
+  export const REGISTER = 'REGISTER';
+  export const REVEIVE_AUTH_CODE = 'REVEIVE_AUTH_CODE';
+  // 首页
+  export const REVEIVE_NOTICE = 'REVEIVE_NOTICE';
+  export const REVEIVE_INDEX = 'REVEIVE_INDEX';
+  export const REVEIVE_INDEX_DETAIL = 'REVEIVE_INDEX_DETAIL';
+  // 业务
+  export const REVEIVET_MY_WALLET_DETAIL = 'REVEIVET_MY_WALLET_DETAIL';
+  export const REVEIVE_AVAILABLE_ENTRUST_LIST = 'REVEIVE_AVAILABLE_ENTRUST_LIST';
+  export const REVEIVE_ENTRUST_DETAIL = 'REVEIVE_ENTRUST_DETAIL';
+  // 交易
+  export const REVEIVE_MARKET_INFO = 'REVEIVE_MARKET_INFO';
+  // 媒体
+  export const REVEIVE_NEWS_LIST = 'REVEIVE_NEWS_LIST';
 
-export const FETCH_NEWS_LIST = 'FETCH_NEWS_LIST';
-export const REVEIVE_NEWS_LIST = 'REVEIVE_NEWS_LIST';
-
-
-
-export const RECEIVE_TOPTEN = 'RECEIVE_TOPTEN';
-export const RECEIVE_IDLIST = 'RECEIVE_IDLIST';
-
-export const RECEIVE_HP = 'RECEIVE_HP';
-
-export const RECEIVE_ESSAY = 'RECEIVE_ESSAY';
-export const RECEIVE_SERIAL = 'RECEIVE_SERIAL';
-export const RECEIVE_QUESTION = 'RECEIVE_QUESTION';
-
-export const RECEIVE_NEXTPAGE = 'RECEIVE_NEXTPAGE';
-
-export const RECEIVE_MUSIC = 'RECEIVE_MUSIC';
-export const RECEIVE_MOVIE = 'RECEIVE_MOVIE';
-export const RECEIVE_MOVIE_PHOTOS = 'RECEIVE_MOVIE_PHOTOS';
-
-export const WEATHER = 'WEATHER';
+  // 我的
+  export const BIND_TEL_OR_EMAIL = 'BIND_TEL_OR_EMAIL';
+  export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+  export const CERTIFY = 'CERTIFY';
+  export const ADVANCED_CERTIFY = 'ADVANCED_CERTIFY';

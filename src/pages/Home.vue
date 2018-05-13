@@ -29,30 +29,33 @@
       </div>
     </div>
     <div>
-      <v-tabs centered color="grey darken-3" slot="extension" v-model="activated_tab" grow height="40">
+      <!--       <v-tabs centered color="grey darken-3" slot="extension" v-model="activated_tab" grow height="40">
         <v-tabs-slider color="amber lighten-4"></v-tabs-slider>
         <v-tab v-for="i in 2" :key="i" :href="`#tab-${i}`">
           <span class="gold-text">{{ i == 1 ? '涨跌榜' : '成交榜'}}</span>
         </v-tab>
         <v-tabs-items>
-          <v-tab-item v-for="i in 3" :key="i" :id="`tab-${i}`">
-            <v-data-table :headers="headers" :items="items" class="elevation-1" dark hide-actions :pagination.sync="pagination">
-              <template slot="items" slot-scope="props">
-                <td class="subheading" :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}">{{ props.item.type }}</td>
-                <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">${{ props.item.price }}</td>
-                <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">{{(props.item.percent > 0 ?'+' : '') + props.item.percent }}%</td>
-              </template>
-              <template slot="pageText" slot-scope="{ pageStart, pageStop }">
-                From {{ pageStart }} to {{ pageStop }}
-              </template>
-            </v-data-table>
-          </v-tab-item>
+          <v-tab-item v-for="i in 2" :key="i" :id="`tab-${i}`"> -->
+      <v-data-table :headers="headers" :items="items" class="elevation-1" dark hide-actions :pagination.sync="pagination">
+        <template slot="items" slot-scope="props">
+          <td class="subheading" :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}">{{ props.item.type }}</td>
+          <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">${{ props.item.price }}</td>
+          <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">{{(props.item.percent > 0 ?'+' : '') + props.item.percent }}%</td>
+          <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">{{ props.item.amount }}</td>
+        </template>
+        <template slot="pageText" slot-scope="{ pageStart, pageStop }">
+          From {{ pageStart }} to {{ pageStop }}
+        </template>
+      </v-data-table>
+      <!--           </v-tab-item>
         </v-tabs-items>
-      </v-tabs>
+      </v-tabs> -->
     </div>
   </div>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'Home',
   data() {
@@ -73,88 +76,143 @@ export default {
         },
         { text: '最新价', value: 'price', align: 'center', },
         { text: '涨跌幅', value: 'percent', align: 'center', },
+        { text: '成交额', value: 'amount', align: 'center', },
       ],
       items: [{
           value: true,
           type: 'BTC',
           price: 159,
+          amount: 159,
           percent: +1
         },
         {
           value: false,
           type: 'ETH',
           price: 237,
+          amount: 237,
           percent: -1
         },
         {
           value: false,
           type: 'BTS',
           price: 262,
+          amount: 262,
           percent: +7
         },
         {
           value: false,
           type: 'BCH',
           price: 305,
+          amount: 305,
           percent: +8
         },
         {
           value: false,
           type: 'XRP',
           price: 356,
+          amount: 356,
           percent: -16
         },
         {
           value: false,
           type: 'LTC',
           price: 375,
+          amount: 375,
           percent: +0
         },
         {
           value: false,
           type: 'ETC',
           price: 392,
+          amount: 392,
           percent: -2
         },
         {
           value: false,
           type: 'EOS',
           price: 408,
+          amount: 408,
           percent: +45
         },
         {
           value: false,
           type: 'ANT',
           price: 452,
+          amount: 452,
           percent: -22
         },
         {
           value: false,
           type: 'RIP',
           price: 518,
+          amount: 518,
           percent: 6
         }
       ],
       coins: [
-        { type: 'BTC/Bitinex1', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
-        { type: 'BTC/Bitinex2', price: '50913.01', somewhat: '$8098.42', trend: 'down' },
-        { type: 'BTC/Bitinex3', price: '50913.01', somewhat: '$8098.42', trend: 'down' },
-        { type: 'BTC/Bitinex4', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
-        { type: 'BTC/Bitinex5', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
-        { type: 'BTC/Bitinex6', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
-        { type: 'BTC/Bitinex7', price: '50913.01', somewhat: '$8098.42', trend: 'down' },
-        { type: 'BTC/Bitinex8', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
+        { id: 'BTC/Bitinex1', type: 'BTC/Bitinex1', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
+        { id: 'BTC/Bitinex2', type: 'BTC/Bitinex2', price: '50913.01', somewhat: '$8098.42', trend: 'down' },
+        { id: 'BTC/Bitinex3', type: 'BTC/Bitinex3', price: '50913.01', somewhat: '$8098.42', trend: 'down' },
+        { id: 'BTC/Bitinex4', type: 'BTC/Bitinex4', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
+        { id: 'BTC/Bitinex5', type: 'BTC/Bitinex5', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
+        { id: 'BTC/Bitinex6', type: 'BTC/Bitinex6', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
+        { id: 'BTC/Bitinex7', type: 'BTC/Bitinex7', price: '50913.01', somewhat: '$8098.42', trend: 'down' },
+        { id: 'BTC/Bitinex8', type: 'BTC/Bitinex8', price: '50913.01', somewhat: '$8098.42', trend: 'up' },
       ],
       text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     }
   },
+  created() {
+    this.getNotice().then(response => {
+      response.data.Item.forEach(item => {
+        this.notice_text += item.Info
+      })
+    });
+    this.getIndex().then(response => {
+      let temp_coins = response.data.Items.map(item => {
+        return {
+          id: item.IndexItemID,
+          type: item.Name,
+          price: item.Index,
+          somewhat: item.Acc,
+          trend: item.Dir == 1 ? 'up' : 'down',
+        }
+      })
+      this.coins = temp_coins;
+      return temp_coins;
+    }).then(data => {
+      Promise.all(data.map(item => {
+        return this.getIndexDetail({ IndexItemID: item.id })
+      })).then(data => {
+        let temp_items = [];
+        data.map(item => {
+          if (item.data.Result.Status == 0) {
+            item.data.Items.forEach(item => {
+              temp_items.push({
+                type: item.Name,
+                price: item.Price,
+                percent: item.Index,
+                amount: item.DealNum,
+              })
+            })
+          }
+        })
+        this.items = temp_items;
+      })
+    })
+  },
   computed: {
-
+    ...mapGetters('home', [
+      'notice', 'index', 'indexDetail'
+    ]),
   },
   watch: {
 
   },
   methods: {
+    ...mapActions('home', [
+      'getNotice', 'getIndex', 'getIndexDetail'
+    ]),
     watch_more() {
       console.log('this')
       this.$router.push({
@@ -229,7 +287,7 @@ export default {
 }
 
 .coin-item {
-  width: 50%;
+  width: 120px;
   margin: 0 10px 15px 10px;
 }
 

@@ -4,7 +4,7 @@
       <v-layout row wrap align-center justify-center>
         <v-flex xs11>
           <v-card class="text-xs-center input-container">
-            <v-tabs icons-and-text centered dark class="tab-container" grow height="50" v-model="activated_tab">
+            <v-tabs icons-and-text centered dark class="tab-container" grow height="50" v-model="login_type">
               <v-tabs-slider color="amber lighten-4"></v-tabs-slider>
               <v-tab href="#tab-1">
                 <v-icon color="amber lighten-4">phone</v-icon>
@@ -15,14 +15,24 @@
               <v-tab-item :id="'tab-' + i" class="input-content" v-for="i in 2" :key="i">
                 <v-layout row wrap align-center justify-center>
                   <v-flex xs11>
-                    <v-text-field  :disabled="is_loading" :error="username_error" v-if="i == 1" :rules="[rules.required,rules.phonenumber,]" dark clearable color="amber lighten-4" name="" :label="'请输入手机号码'" v-model="username" class="input-content-username" key="phone"></v-text-field>
-                    <v-text-field :disabled="is_loading" :error="username_error" v-else :rules="[rules.required,rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="username" class="input-content-username" key="email"></v-text-field>
-                    <v-text-field :disabled="is_loading" :error="password_error" :rules="[rules.required,]" dark color="amber lighten-4" name="" label="请输入用户密码" v-model="password" class="input-content-password" :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="change_password_visible" :type="e1 ? 'password' : 'text'"></v-text-field>
+                    <v-text-field :disabled="is_loading" v-if="i == 1" :rules="[rules.required,rules.phonenumber,]" dark clearable color="amber lighten-4" name="" :label="'请输入手机号码'" v-model="username" class="input-content-username" key="phone"></v-text-field>
+                    <v-text-field :disabled="is_loading" v-else :rules="[rules.required,rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="username" class="input-content-username" key="email"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.required,]" dark color="amber lighten-4" name="" label="请输入用户密码" v-model="password" class="input-content-password" :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="change_password_visible" :type="e1 ? 'password' : 'text'"></v-text-field>
+                    <v-layout row wrap>
+                      <v-flex xs7>
+                        <v-text-field :error="checknumber_error" :rules="[rules.required,rules.checknumber,]" single-line dark color="amber lighten-4" name="" v-model="checknumber" label="请输入验证码" class="input-content-checknum"></v-text-field>
+                      </v-flex>
+                      <v-flex xs5>
+                        <v-btn @click.native="send_checknum" :disabled="is_loading || is_sending_checknum" value="left" small color="amber lighten-4" style="margin-top:10px;">
+                          <span>{{countdown}}</span>
+                        </v-btn>
+                      </v-flex>
+                    </v-layout>
                   </v-flex>
-                  <v-flex xs11 offset-xs7>
+                  <!--   <v-flex xs11 offset-xs7>
                     <v-spacer></v-spacer>
                     <v-checkbox :disabled="is_loading" color="amber lighten-4" dark label="记住密码" v-model="checkbox"></v-checkbox>
-                  </v-flex>
+                  </v-flex> -->
                   <v-flex xs11>
                     <v-btn @click.native="signin" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>登录</v-btn>
                   </v-flex>
@@ -30,7 +40,7 @@
               </v-tab-item>
             </v-tabs>
             <v-card-actions>
-              <v-btn flat color="grey lighten-4" replace :to="{name:'Signup'}">忘记密码</v-btn>
+              <!-- <v-btn flat color="grey lighten-4" replace :to="{name:'Signup'}">忘记密码</v-btn> -->
               <v-spacer></v-spacer>
               <v-btn flat color="grey lighten-4" replace :to="{name:'Signup'}">用户注册</v-btn>
             </v-card-actions>
@@ -45,21 +55,25 @@
   </v-app>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
   name: 'Signin',
   data() {
     return {
-      activated_tab: 'tab-1',
+      login_type: 'tab-1',
       snackbar: false,
       snackbar_text: '',
       e1: false,
       username: '',
       password: '',
+      checknumber: '',
       checkbox: true,
       is_loading: false,
-      username_error: false,
-      password_error: false,
       input_error: false,
+      countdown: '发送验证码',
+      is_sending_checknum: false,
+
       rules: {
         required: (value) => {
           this.input_error = false;
@@ -77,6 +91,15 @@ export default {
           } else {
             this.input_error = true;
             return '不是有效的邮箱地址';
+          }
+        },
+        checknumber: (value) => {
+          const pattern = /^[A-Za-z0-9]{6}$/;
+          if (pattern.test(value)) {
+            return true;
+          } else {
+            this.input_error = true;
+            return '不是有效的6位验证码';
           }
         },
         phonenumber: (value) => {
@@ -98,6 +121,34 @@ export default {
 
   },
   methods: {
+    ...mapActions('signin', [
+      'login'
+    ]),
+    send_checknum() {
+      if (!this.username) {
+        this.snackbar_text = this.login_type == 'tab-1' ? '手机号码不能为空' : '邮箱地址不能为空';
+        this.snackbar = true;
+        return;
+      }
+      this.getAuthCode({
+        Type: this.register_type == 'tab-1' ? '2' : '1',
+        ID: this.username
+      }).then(response => {
+        this.is_sending_checknum = true;
+        this.countdown = 60;
+        let interval_id = setInterval(() => {
+          this.countdown -= 1;
+          if (this.countdown == 0) {
+            this.is_sending_checknum = false;
+            this.countdown = '发送验证码';
+            clearInterval(interval_id);
+          }
+        }, 1000)
+      }).catch(error => {
+        this.snackbar_text = '发送验证码失败';
+        this.snackbar = true;
+      })
+    },
     signin() {
       this.is_loading = true;
       if (!this.username || !this.password) {
@@ -111,22 +162,45 @@ export default {
         this.is_loading = false;
         return;
       }
-      setTimeout(() => {
-        if (this.username != 'admin' && this.username != '13400544025') {
-          this.snackbar_text = '该用户尚未注册';
-          this.snackbar = true;
-          this.username_error = true;
-        } else if (this.password != '123') {
-          this.snackbar_text = '密码错误';
-          this.snackbar = true;
-          this.password_error = true;
-        } else {
+
+      this.login({
+        Type: this.register_type == 'tab-1' ? '2' : '1',
+        ID: this.username,
+        Pwd: this.password,
+        AuthCode: this.checknumber,
+      }).then(response => {
+        console.log(response.data.Status)
+        if (response.data.Status == 0) {
           this.$router.push({
             name: 'Home'
           })
+        } else {
+          this.snackbar_text = response.data.FaultMsg;
+          this.snackbar = true;
+          this.is_loading = false;
         }
+      }).catch(error => {
+        this.snackbar_text = '登录失败';
+        this.snackbar = true;
         this.is_loading = false;
-      }, 2000);
+      })
+
+      // setTimeout(() => {
+      //   if (this.username != 'admin' && this.username != '13400544025') {
+      //     this.snackbar_text = '该用户尚未注册';
+      //     this.snackbar = true;
+      //     this.username_error = true;
+      //   } else if (this.password != '123') {
+      //     this.snackbar_text = '密码错误';
+      //     this.snackbar = true;
+      //     this.password_error = true;
+      //   } else {
+      //     this.$router.push({
+      //       name: 'Home'
+      //     })
+      //   }
+      //   this.is_loading = false;
+      // }, 2000);
     },
     change_password_visible() {
       this.e1 = !this.e1

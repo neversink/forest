@@ -1,11 +1,34 @@
 import axios from 'axios';
+import qs from 'qs'
 
 // const baseURL = 'http://v3.wufazhuce.com:8000';
-const baseURL = 'https://data.jianshukeji.com';
-const getStockInfo = '/stock/history/000001';
+// const baseURL = 'https://data.jianshukeji.com/stock/history/000001';
+// const getStockInfo = '';
+const baseURL = 'http://39.107.235.23/DealApp/servlet';
+const Notice = 'Notice';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+// const getStockInfo = '/stock/history/000001';
+
 
 const instance = axios.create({
-  baseURL: baseURL
+  baseURL: baseURL,
+  changeOrigin: true,
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
+  withCredentials: true
 });
 
 const reg = /\{(.+)\}/ig;
@@ -13,43 +36,43 @@ const reg = /\{(.+)\}/ig;
 function mock_news() {
   return [{
       id: Math.random(),
-      title: 'ç«å¸çŸ¿æ± å…¥å±€,EOSè¶…çº§èŠ‚ç‚¹ç«é€‰ä¹‹æˆ˜æ„ˆåŠ æ¿€çƒˆ',
-      content: 'ç«å¸é›†å›¢4æœˆ24æ—¥å‘å¸ƒå…¬å‘Šç§°,ç«å¸çŸ¿æ± æ­£å¼å‚ä¸ç«é€‰EOSè¶…çº§èŠ‚ç‚¹ã€‚',
+      title: '»ğ±Ò¿ó³ØÈë¾Ö,EOS³¬¼¶½Úµã¾ºÑ¡Ö®Õ½Óú¼Ó¼¤ÁÒ',
+      content: '»ğ±Ò¼¯ÍÅ4ÔÂ24ÈÕ·¢²¼¹«¸æ³Æ,»ğ±Ò¿ó³ØÕıÊ½²ÎÓë¾ºÑ¡EOS³¬¼¶½Úµã¡£',
       src: './static/img/docks.jpg',
       href: 'Article'
     },
     {
       id: Math.random(),
-      title: 'EOSæƒåŠ›ä¹‹äº‰,â€œæ¸©å·å¸®â€æº40äº¿æ€å…¥',
-      content: 'ä»Šå¹´3æœˆï¼ŒEOSåˆ›å§‹äººBMï¼ˆDaniel Larimerï¼‰å…¬å¸ƒç”±EOSæŒæœ‰è€…æŠ•ç¥¨ã€é€‰å‡º21ä¸ªEOSè¶…çº§èŠ‚ç‚¹ã€‚',
+      title: 'EOSÈ¨Á¦Ö®Õù,¡°ÎÂÖİ°ï¡±Ğ¯40ÒÚÉ±Èë',
+      content: '½ñÄê3ÔÂ£¬EOS´´Ê¼ÈËBM£¨Daniel Larimer£©¹«²¼ÓÉEOS³ÖÓĞÕßÍ¶Æ±¡¢Ñ¡³ö21¸öEOS³¬¼¶½Úµã¡£',
       src: './static/img/hero.jpg',
       href: 'Article'
     },
     {
       id: Math.random(),
-      title: 'EOSæå¸æ‹‰ç›˜?æ•°æ®å‘Šè¯‰ä½ çœŸç›¸åœ¨è¿™é‡Œ',
-      content: 'ä»Šå¤©ä¸è®¨è®ºEOSæ‹¿é’±å»å¹²å˜›äº†,åªéªŒè¯ä¸‹ä¸€ä¸ªäºŒçº§å¸‚åœºæµè¡Œçš„è§‚ç‚¹',
+      title: 'EOSÌá±ÒÀ­ÅÌ?Êı¾İ¸æËßÄãÕæÏàÔÚÕâÀï',
+      content: '½ñÌì²»ÌÖÂÛEOSÄÃÇ®È¥¸ÉÂïÁË,Ö»ÑéÖ¤ÏÂÒ»¸ö¶ş¼¶ÊĞ³¡Á÷ĞĞµÄ¹Ûµã',
       src: './static/img/section.jpg',
       href: 'Article'
     },
     {
       id: Math.random(),
-      title: 'çªå‘!EOSè½¬å‡º47ä¸‡ä¸ªä»¥å¤ªåŠ',
-      content: 'BMå½“åˆåšEOSæ—¶,ä¹Ÿä¸ä¼šæ–™æƒ³è‡ªå·±æœ‰ä¸€å¤©ä¼šæˆä¸ºEOSçš„ä¿¡ä»»é¢†è¢–ã€‚',
+      title: 'Í»·¢!EOS×ª³ö47Íò¸öÒÔÌ«·»',
+      content: 'BMµ±³õ×öEOSÊ±,Ò²²»»áÁÏÏë×Ô¼ºÓĞÒ»Ìì»á³ÉÎªEOSµÄĞÅÈÎÁìĞä¡£',
       src: './static/img/sunshine.jpg',
       href: 'Article'
     },
     {
       id: Math.random(),
-      title: 'ä¸¤å¤©å†…ä¸Šæ¶¨è¶…è¿‡ 45% çš„ EOS ç©¶ç«Ÿæ€ä¹ˆäº†? ',
-      content: 'EOS æœ€è¿‘èµšè¶³äº†çœ¼çƒã€‚ ç»ˆäº,ä»å‘¨ä¸‰å¼€å§‹,EOS çš„ä»·æ ¼å‡ºç°å¼‚åŠ¨,ä¸¤å¤©å†…,ä»å…¨ç½‘å‡ä»·ä¸åˆ° 6 ç¾å…ƒ,è¿…é€Ÿä¸Šæ¶¨',
+      title: 'Á½ÌìÄÚÉÏÕÇ³¬¹ı 45% µÄ EOS ¾¿¾¹ÔõÃ´ÁË? ',
+      content: 'EOS ×î½ü×¬×ãÁËÑÛÇò¡£ ÖÕÓÚ,´ÓÖÜÈı¿ªÊ¼,EOS µÄ¼Û¸ñ³öÏÖÒì¶¯,Á½ÌìÄÚ,´ÓÈ«Íø¾ù¼Û²»µ½ 6 ÃÀÔª,Ñ¸ËÙÉÏÕÇ',
       src: './static/img/road.jpg',
       href: 'Article'
     },
     {
       id: Math.random(),
-      title: 'EOSåˆç–¯äº†!æš´æ¶¨60%,éš¾é“ç‰›å¸‚åˆæ¥äº†?',
-      content: '4æœˆ11æ—¥12ç‚¹,EOSåœ¨ç«å¸çš„æˆäº¤ä»·æ˜¯35å…ƒ,4æœˆ12æ—¥12ç‚¹,å˜æˆäº†57å…ƒ,ä¸Šæ¶¨äº†60%!',
+      title: 'EOSÓÖ·èÁË!±©ÕÇ60%,ÄÑµÀÅ£ÊĞÓÖÀ´ÁË?',
+      content: '4ÔÂ11ÈÕ12µã,EOSÔÚ»ğ±ÒµÄ³É½»¼ÛÊÇ35Ôª,4ÔÂ12ÈÕ12µã,±ä³ÉÁË57Ôª,ÉÏÕÇÁË60%!',
       src: './static/img/desert.jpg',
       href: 'Article'
     }
@@ -57,11 +80,63 @@ function mock_news() {
 }
 
 export default {
-  getStockInfo() {
-    return instance.get(getStockInfo);
+  // µÇÂ¼
+  login(param) {
+    return instance.post('Login', qs.stringify(param));
   },
-
+  logout() {
+    return instance.post('LoginOut');
+  },
+  // ×¢²á
+  register(param) {
+    return instance.post('Register', qs.stringify(param));
+  },
+  getAuthCode(param) {
+    return instance.post('GetAuthCode', qs.stringify(param));
+  },
+  // Ê×Ò³
+  getNotice(param) {
+    return instance.post('Notice', qs.stringify(param))
+  },
+  getIndex() {
+    return instance.post('GetIndex')
+  },
+  getIndexDetail(param) {
+    return instance.post('GetIndexDetail', qs.stringify(param))
+  },
+  // ÒµÎñ
+  getWallet(param) {
+    return instance.post('GetWallet', qs.stringify(param))
+  },
+  getAvailableEntrustList(param) {
+    return instance.post('GetUsedEntrust', qs.stringify(param))
+  },
+  getEntrustDetail(param) {
+    return instance.post('GetEntrustQuery', qs.stringify(param))
+  },
+  // ½»Ò×
+  getStockInfo() {
+    return instance.get('', {
+      baseURL: 'https://data.jianshukeji.com/stock/history/000001'
+    })
+  },
+  // Ã½Ìå
   getNewsList() {
     return Promise.resolve(mock_news())
-  }
+  },
+  // ÎÒµÄ
+  bindTelOrEmail() {
+    return instance.post('Bind')
+  },
+  changePassword() {
+    return instance.post('ModifyPwd')
+  },
+  certify() {
+    return instance.post('Auth')
+  },
+  advancedCertify() {
+    return instance.post('AdvAuto')
+  },
+
+
 }

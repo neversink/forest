@@ -20,6 +20,7 @@
     "material-design-icons-iconfont": "^3.0.3",
     "mdi": "^2.2.43",
     "muse-ui": "^2.1.0",
+    "qs": "^6.5.2",
     "vant": "^1.0.1",
     "vant-css": "^1.0.1",
     "vue": "^2.5.16",
