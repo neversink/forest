@@ -3,13 +3,13 @@
     <div class="main-container">
       <div class="personal-info">
         <img class="avatar" src="../assets/img/avatar.png">
+        <!-- <br> -->
+        <!-- <br> -->
+        <!-- <span class="username gold-text title">{{Nick}}</span> -->
         <br>
+        <span class="userid gold-text caption">用户ID：{{ID}}</span>
         <br>
-        <span class="username gold-text title">neversink</span>
-        <br>
-        <span class="userid gold-text caption">ID：123123123</span>
-        <br>
-        <span class="integrity gold-text caption">资料完整度80%</span>
+        <span class="integrity gold-text caption">资料完整度<van-rate v-model="StarLevel"/></span>
         <br>
         <!-- <span class="service gold-text">APP在线客服</span> -->
       </div>
@@ -30,7 +30,7 @@
                 <v-list-tile-sub-title class="caption" style="color:white">{{i.subtitle}}</v-list-tile-sub-title>
               </v-list-tile-content>
               <v-list-tile-action>
-                <v-btn flat @click.native="click_action(i.title,i.action)">
+                <v-btn :disabled="!i.enable" flat @click.native="click_action(i.title,i.action)">
                   <span class="body-2 grey-text">{{i.action}}</span>
                 </v-btn>
               </v-list-tile-action>
@@ -50,44 +50,89 @@
             <v-btn icon @click.native="show_dialog = false" dark>
               <v-icon color="amber lighten-3">close</v-icon>
             </v-btn>
-            <v-toolbar-title v-text="'认证'" style="color:#FFE082;fontSize:16px;"></v-toolbar-title>
+            <v-toolbar-title v-text="confirm_type" style="color:#FFE082;fontSize:16px;"></v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
             <v-container fluid grid-list-md text-xs-center>
               <v-layout row wrap justify-center>
-                <template v-if="confirm_type == 'base'">
+                <template v-if="confirm_type == '实名认证'">
                   <v-flex xs11>
-                    <div class="subhead-container">
-                      <h2 class="subhead gold-text">身份认证</h2>
-                      <h3 class="subhead-detail"></h3>
-                    </div>
-                  </v-flex>
-                  <v-flex xs11>
-                    <v-text-field :disabled="is_loading" :error="name_error" :rules="[rules.name,]" dark clearable color="amber lighten-4" name="" :label="'请输入姓名'" v-model="name" class="input-content-username" key="name"></v-text-field>
-                    <v-text-field :disabled="is_loading" :error="idcard_error" :rules="[rules.idcard,]" dark clearable color="amber lighten-4" name="" :label="'请输入身份证号码'" v-model="idcard" class="input-content-username" key="idcard"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.name,]" dark clearable color="amber lighten-4" name="" :label="'请输入姓名'" v-model="name" class="input-content-username" key="name"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.idcard,]" dark clearable color="amber lighten-4" name="" :label="'请输入身份证号码'" v-model="idcard" class="input-content-idcard" key="idcard"></v-text-field>
                   </v-flex>
                   <v-flex xs11>
                     <v-btn @click.native="base_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>认证</v-btn>
                   </v-flex>
                 </template>
-                <template v-else>
+                <template v-if="confirm_type == '高级认证'">
                   <v-flex xs11>
-                    <div class="subhead-container">
-                      <h2 class="subhead gold-text">高级认证</h2>
-                      <h3 class="subhead-detail"></h3>
-                    </div>
-                  </v-flex>
-                  <v-flex xs11>
-                    <van-uploader :after-read="onRead">
-                     <v-icon large color="blue-grey darken-2">camera</v-icon><span class="gold-text">点击选择图片</span>
+                    <van-uploader :after-read="onRead" style="margin-bottom: 20px">
+                      <v-icon large color="amber lighten-4">camera_alt</v-icon><span class="gold-text">点击选择图片</span>
                     </van-uploader>
+                    <br>
                     <template v-for="(i, index) in upload_photos">
-                      <img src="i" :key="index">
+                      <img :src="i" :key="index" style="max-width: 90%">
                     </template>
                   </v-flex>
                   <v-flex xs11>
-                    <v-btn @click.native="advance_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>认证</v-btn>
+                    <v-btn @click.native="advance_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button mb-6" color="amber lighten-4" large>认证</v-btn>
+                  </v-flex>
+                </template>
+                <template v-if="confirm_type == '邮箱'">
+                  <v-flex xs11>
+                    <v-text-field :disabled="is_loading" :rules="[rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="name" class="input-content-username" key="email"></v-text-field>
+                    <v-layout row wrap>
+                      <v-flex xs7>
+                        <v-text-field :rules="[rules.required,rules.checknumber,]" single-line dark color="amber lighten-4" name="" v-model="checknumber" label="请输入验证码" class="input-content-checknum"></v-text-field>
+                      </v-flex>
+                      <v-flex xs5>
+                        <v-btn @click.native="send_checknum" :disabled="is_loading || is_sending_checknum" value="left" small color="amber lighten-4" style="margin-top:10px;">
+                          <span>{{countdown}}</span>
+                        </v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-btn @click.native="bind_email" :loading="is_loading" :disabled="is_loading" block class="login-button mb-6" color="amber lighten-4" large>绑定</v-btn>
+                  </v-flex>
+                </template>
+                <template v-if="confirm_type == '手机'">
+                  <v-flex xs11>
+                    <v-text-field :disabled="is_loading" :rules="[rules.tel,]" dark clearable color="amber lighten-4" name="" :label="'请输入手机号码'" v-model="tel" class="input-content-username" key="tel"></v-text-field>
+                    <v-layout row wrap>
+                      <v-flex xs7>
+                        <v-text-field :rules="[rules.required,rules.checknumber,]" single-line dark color="amber lighten-4" name="" v-model="checknumber" label="请输入验证码" class="input-content-checknum"></v-text-field>
+                      </v-flex>
+                      <v-flex xs5>
+                        <v-btn @click.native="send_checknum" :disabled="is_loading || is_sending_checknum" value="left" small color="amber lighten-4" style="margin-top:10px;">
+                          <span>{{countdown}}</span>
+                        </v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-btn @click.native="bind_tel" :loading="is_loading" :disabled="is_loading" block class="login-button mb-6" color="amber lighten-4" large>绑定</v-btn>
+                  </v-flex>
+                </template>
+                <template v-if="confirm_type == '登录密码'">
+                  <v-flex xs11>
+                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原登录密码'" v-model="login_pwd_old" class="input-content-username" key="login_pwd_old"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入新登录密码'" v-model="login_pwd" key="login_pwd"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.confirmpassword,]" dark clearable color="amber lighten-4" name="" :label="'请再次输入新登录密码'" v-model="login_pwd2" class="input-content-idcard" key="login_pwd2"></v-text-field>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-btn @click.native="change_login_pwd" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>修改</v-btn>
+                  </v-flex>
+                </template>
+                <template v-if="confirm_type == '资金密码'">
+                  <v-flex xs11>
+                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原资金密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入新资金密码'" v-model="asset_pwd" key="asset_pwd"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.confirmpassword,]" dark clearable color="amber lighten-4" name="" :label="'请再次输入新资金密码'" v-model="asset_pwd2" class="input-content-idcard" key="asset_pwd2"></v-text-field>
+                  </v-flex>
+                  <v-flex xs11>
+                    <v-btn @click.native="change_asset_pwd" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>修改</v-btn>
                   </v-flex>
                 </template>
               </v-layout>
@@ -96,9 +141,16 @@
         </v-card>
       </v-dialog>
     </div>
+    <v-snackbar :color="snackbar_color" :timeout="3000" :top="'top'" v-model="snackbar">
+      {{ snackbar_text }}
+      <v-btn dark flat @click.native="snackbar = false">关闭</v-btn>
+    </v-snackbar>
   </v-app>
 </template>
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
+
 export default {
   name: 'Profile',
   data() {
@@ -107,90 +159,26 @@ export default {
       show_dialog: false,
       name: '',
       idcard: '',
+      email: '',
+      tel: '',
+      login_pwd_old: '',
+      login_pwd: '',
+      login_pwd2: '',
+      asset_pwd_old: '',
+      asset_pwd: '',
+      asset_pwd2: '',
       is_loading: false,
       name_error: false,
       idcard_error: false,
       confirm_type: '',
       upload_photos: [],
-      items: {
-        sfrz_items: {
-          title: '身份认证',
-          subtitle: '请如实填写您的身份信息，一经认证不可修改',
-          content: [{
-              icon: 'mdi-account',
-              title: '实名认证',
-              subtitle: '柳成萌 350000000000000',
-              action: '已认证',
-            },
-            {
-              icon: 'mdi-account-card-details',
-              title: '高级认证',
-              subtitle: '您还未进行高级认证',
-              action: '添加',
-            },
-          ]
-        },
-        zhaq_items: {
-          title: '账户安全',
-          subtitle: '安全等级：中',
-          content: [{
-              icon: 'mdi-email',
-              title: '邮件',
-              subtitle: '已绑定',
-              action: '关闭',
-            },
-            {
-              icon: 'mdi-cellphone',
-              title: '手机',
-              subtitle: '已绑定',
-              action: '关闭',
-            }, {
-              icon: 'mdi-google',
-              title: '谷歌验证码',
-              subtitle: '未绑定',
-              action: '绑定',
-            },
-            {
-              icon: 'lock',
-              title: '登录密码',
-              subtitle: '******',
-              action: '修改',
-            }, {
-              icon: 'mdi-cash-usd',
-              title: '资金密码',
-              subtitle: '******',
-              action: '重置',
-            }
-          ],
-        },
-        qtne_items: {
-          title: '其他内容',
-          subtitle: '',
-          content: [{
-              icon: 'face',
-              title: '在线客服',
-              subtitle: 'forest@forest.com',
-              action: '在线咨询',
-            }, {
-              icon: 'mdi-at',
-              title: '邮件咨询',
-              subtitle: 'forest@forest.com',
-              action: '发送邮件',
-            },
-            {
-              icon: 'mdi-phone-in-talk',
-              title: '电话咨询',
-              subtitle: '123456',
-              action: '拨打电话',
-            }, {
-              icon: 'mdi-cached',
-              title: '清除缓存',
-              subtitle: '当前已用缓存10M',
-              action: '清除',
-            },
-          ],
-        },
-      },
+      checknumber: '',
+      countdown: '发送验证码',
+      is_sending_checknum: false,
+      snackbar: false,
+      snackbar_text: '',
+      snackbar_color: 'error',
+      items: {},
       rules: {
         name: (value) => {
           if (!!value) {
@@ -206,30 +194,198 @@ export default {
             return '必填项';
           }
         },
+        email: (value) => {
+          if (!!value) {
+            return true;
+          } else {
+            return '必填项';
+          }
+        },
+        tel: (value) => {
+          if (!!value) {
+            return true;
+          } else {
+            return '必填项';
+          }
+        },
+        password: (value) => {
+          const length_limit = value.length > 7;
+          if (length_limit) {
+            return true;
+          } else if (!length_limit) {
+            return '密码长度至少为8位';
+          }
+        },
+        confirmpassword: (value) => {
+          const length_limit = value.length > 7;
+          const the_same = this.confirm_tyoe == '登录密码' ? this.login_pwd == this.login_pwd2 : this.asset_pwd == this.asset_pwd2;
+          if (length_limit && the_same) {
+            return true;
+          } else if (!length_limit) {
+            return '密码长度至少为8位';
+          } else {
+            return '两次输入的密码不一致';
+          }
+        },
+        checknumber: (value) => {
+          const pattern = /^[A-Za-z0-9]{6}$/;
+          if (pattern.test(value)) {
+            return true;
+          } else {
+            this.input_error = true;
+            return '不是有效的6位验证码';
+          }
+        },
       }
     }
   },
   computed: {
-
+    ...mapGetters('signin', [
+      'ID', 'Nick', 'StarLevel', 'IsAuth', 'AuthInfo', 'IsAdvAuth', 'SecrLevel', 'IsEmalBind', 'IsPhoneBind', 'IsGoogleAuth'
+    ]),
   },
   watch: {
 
   },
+  mounted() {
+    this.items = {
+      sfrz_items: {
+        title: '身份认证',
+        subtitle: '请如实填写您的身份信息，一经认证不可修改',
+        content: [{
+            icon: 'mdi-account',
+            title: '实名认证',
+            subtitle: this.IsAuth == 0 ? '您还未进行实名认证' : '已认证',
+            action: this.IsAuth == 0 ? '认证' : '',
+            enable: this.IsAuth === 0 || !this.IsAuth ? true : false,
+          },
+          {
+            icon: 'mdi-account-card-details',
+            title: '高级认证',
+            subtitle: this.IsAdvAuth == 0 ? '您还未进行高级认证' : '已认证',
+            action: this.IsAdvAuth == 0 ? '认证' : '',
+            enable: this.IsAdvAuth === 0 || !this.IsAdvAuth ? true : false,
+          },
+        ]
+      },
+      zhaq_items: {
+        title: '账户安全',
+        subtitle: '安全等级：' + (this.SecrLevel == 1 ? '低' : this.SecrLevel == 2 ? '中' : '高'),
+        content: [{
+            icon: 'mdi-email',
+            title: '邮箱',
+            subtitle: this.IsEmalBind == 0 ? '未绑定' : '已绑定',
+            action: this.IsEmalBind == 0 ? '绑定' : '',
+            enable: this.IsEmalBind == 0 || !this.IsEmalBind ? true : false,
+          },
+          {
+            icon: 'mdi-cellphone',
+            title: '手机',
+            subtitle: this.IsPhoneBind == 0 ? '未绑定' : '已绑定',
+            action: this.IsPhoneBind == 0 ? '绑定' : '',
+            enable: this.IsPhoneBind == 0 || !this.IsPhoneBind ? true : false,
+          },
+          {
+            icon: 'mdi-google',
+            title: '谷歌验证码',
+            subtitle: this.IsGoogleAuth == 0 ? '未绑定' : '已绑定',
+            action: this.IsGoogleAuth == 0 ? '绑定' : '',
+            enable: this.IsGoogleAuth == 0 || !this.IsGoogleAuth ? true : false,
+          },
+          {
+            icon: 'lock',
+            title: '登录密码',
+            subtitle: '******',
+            action: '修改',
+            enable: true
+          }, {
+            icon: 'mdi-cash-usd',
+            title: '资金密码',
+            subtitle: '******',
+            action: '修改',
+            enable: true
+          }
+        ],
+      },
+      qtne_items: {
+        title: '其他内容',
+        subtitle: '',
+        content: [{
+            icon: 'face',
+            title: '在线客服',
+            subtitle: 'forest@forest.com',
+            action: '在线咨询',
+            enable: true
+          },
+          {
+            icon: 'mdi-at',
+            title: '邮件咨询',
+            subtitle: 'forest@forest.com',
+            action: '发送邮件',
+            enable: true
+          },
+          {
+            icon: 'mdi-phone-in-talk',
+            title: '电话咨询',
+            subtitle: '123456',
+            action: '拨打电话',
+            enable: true
+          },
+          // {
+          //   icon: 'mdi-cached',
+          //   title: '清除缓存',
+          //   subtitle: '当前已用缓存10M',
+          //   action: '清除',
+          // },
+        ],
+      },
+    }
+  },
   methods: {
+    ...mapActions('profile', [
+      'bindTelOrEmail', 'changePassword', 'certify', 'advancedCertify'
+    ]),
+    show_snackbar(content, type) {
+      this.snackbar_color = type;
+      this.snackbar_text = content;
+      this.snackbar = true;
+      this.is_loading = false;
+      if (type == 'success') {
+        this.show_dialog = false;
+      }
+    },
     onRead(file) {
       this.upload_photos.push(file.content)
-      console.log(file)
     },
     click_action(type, action) {
       console.log(type, action)
+      this.confirm_type = type;
       switch (type) {
         case '实名认证':
-          this.confirm_type = 'base';
+          this.name = '';
+          this.id = '';
           this.show_dialog = true;
           break;
         case '高级认证':
           this.upload_photos = [];
-          this.confirm_type = 'advance';
+          this.show_dialog = true;
+          break;
+        case '邮箱':
+          this.email = '';
+          this.show_dialog = true;
+          break;
+        case '手机':
+          this.tel = '';
+          this.show_dialog = true;
+          break;
+        case '登录密码':
+          this.login_pwd = '';
+          this.login_pwd2 = '';
+          this.show_dialog = true;
+          break;
+        case '资金密码':
+          this.asset_pwd = '';
+          this.asset_pwd2 = '';
           this.show_dialog = true;
           break;
         case '邮件咨询':
@@ -240,7 +396,144 @@ export default {
           window.location.href = "tel:123456"
           break;
       }
-    }
+    },
+    bind_tel() {
+      this.is_loading = true;
+      this.bindTelOrEmail({
+        Type: '2',
+        ID: this.ID,
+        ID: this.tel,
+        AuthCode: ''
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.show_snackbar('绑定电话成功', 'success')
+        } else {
+          this.show_snackbar(response.data.Result.FaultMsg, 'error')
+        }
+      }).catch(e => {
+        this.show_snackbar('绑定电话失败', 'error')
+      })
+    },
+    bind_email() {
+      this.is_loading = true;
+      this.bindTelOrEmail({
+        Type: '1',
+        ID: this.ID,
+        ID: this.email,
+        AuthCode: ''
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.show_snackbar('绑定邮箱成功', 'success')
+        } else {
+          this.show_snackbar(response.data.Result.FaultMsg, 'error')
+        }
+      }).catch(e => {
+        this.show_snackbar('绑定邮箱失败', 'error')
+      })
+    },
+    change_login_pwd() {
+      this.is_loading = true;
+      this.changePassword({
+        Type: '1',
+        ID: this.ID,
+        From: this.login_pwd_old,
+        To: this.login_pwd
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.show_snackbar('修改登录密码成功', 'success')
+          setTimeout(() => {
+            this.$router.push({
+              name: 'Signin'
+            })
+          }, 2000)
+        } else {
+          this.show_snackbar(response.data.Result.FaultMsg, 'error')
+        }
+      }).catch(e => {
+        this.show_snackbar('修改登录密码失败', 'error')
+      })
+    },
+    change_asset_pwd() {
+      this.is_loading = true;
+      this.changePassword({
+        Type: '1',
+        ID: this.ID,
+        From: this.asset_pwd_old,
+        To: this.asset_pwd,
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.show_snackbar('修改登录密码成功', 'success')
+        } else {
+          this.show_snackbar(response.data.Result.FaultMsg, 'error')
+        }
+      }).catch(e => {
+        this.show_snackbar('修改登录密码失败', 'error')
+
+      })
+    },
+    base_confirm() {
+      this.is_loading = true;
+      this.certify({
+        ID: this.ID,
+        Name: this.name,
+        ID: this.idcard,
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.show_snackbar('实名认证提交成功', 'success')
+        } else {
+          this.show_snackbar(response.data.Result.FaultMsg, 'error')
+        }
+      }).catch(e => {
+        console.log(e)
+        this.show_snackbar('实名认证提交失败', 'error')
+      })
+    },
+    advance_confirm() {
+      this.is_loading = true;
+      let temp_param = {};
+      this.upload_photos.forEach((i, index) => {
+        temp['photo' + index] = i
+      })
+      temp[ID] = this.ID;
+      this.advancedCertify(temp_param)
+        .then(response => {
+          if (response.data.Result.Status == 0) {
+            this.show_snackbar('高级认证提交成功', 'success')
+          } else {
+            this.show_snackbar(response.data.Result.FaultMsg, 'error')
+          }
+        }).catch(e => {
+          this.show_snackbar('高级认证提交失败', 'error')
+        })
+    },
+    send_checknum() {
+      if (this.confirm_tyoe == '手机' && this.tel) {
+        show_snackbar('手机号码不能为空', 'error')
+        return;
+      }
+      if (this.confirm_tyoe == '邮箱' && this.email) {
+        show_snackbar('邮箱地址不能为空', 'error')
+        return;
+      }
+      this.getAuthCode({
+        Type: this.confirm_tyoe == '手机' ? '2' : '1',
+        ID: this.confirm_tyoe == '手机' ? this.tel : this.email,
+      }).then(response => {
+        this.is_sending_checknum = true;
+        this.countdown = 60;
+        let interval_id = setInterval(() => {
+          this.countdown -= 1;
+          if (this.countdown == 0) {
+            this.is_sending_checknum = false;
+            this.countdown = '发送验证码';
+            clearInterval(interval_id);
+          }
+        }, 1000)
+      }).catch(error => {
+        this.snackbar_text = '发送验证码失败';
+        this.snackbar = true;
+      })
+    },
   }
 };
 
@@ -304,7 +597,7 @@ export default {
   padding: 30px 0 0 0;
   vertical-align: center;
   text-align: center;
-  margin-bottom: 20px;
+  /*margin-bottom: 20px;*/
   background-size: cover;
 }
 
@@ -318,6 +611,10 @@ export default {
 
 .input-content-username {
   margin-top: 20px;
+}
+
+.input-content-idcard {
+  margin-bottom: 20px;
 }
 
 </style>

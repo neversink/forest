@@ -20,7 +20,7 @@
                     <v-text-field :disabled="is_loading" :rules="[rules.required,]" dark color="amber lighten-4" name="" label="请输入用户密码" v-model="password" class="input-content-password" :append-icon="e1 ? 'visibility' : 'visibility_off'" :append-icon-cb="change_password_visible" :type="e1 ? 'password' : 'text'"></v-text-field>
                     <v-layout row wrap>
                       <v-flex xs7>
-                        <v-text-field :error="checknumber_error" :rules="[rules.required,rules.checknumber,]" single-line dark color="amber lighten-4" name="" v-model="checknumber" label="请输入验证码" class="input-content-checknum"></v-text-field>
+                        <v-text-field :rules="[rules.required,rules.checknumber,]" single-line dark color="amber lighten-4" name="" v-model="checknumber" label="请输入验证码" class="input-content-checknum"></v-text-field>
                       </v-flex>
                       <v-flex xs5>
                         <v-btn @click.native="send_checknum" :disabled="is_loading || is_sending_checknum" value="left" small color="amber lighten-4" style="margin-top:10px;">
@@ -48,7 +48,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-snackbar color="error" :timeout="3000" :top="'top'" v-model="snackbar">
+    <v-snackbar :color="snackbar_color" :timeout="3000" :top="'top'" v-model="snackbar">
       {{ snackbar_text }}
       <v-btn dark flat @click.native="snackbar = false">关闭</v-btn>
     </v-snackbar>
@@ -73,7 +73,7 @@ export default {
       input_error: false,
       countdown: '发送验证码',
       is_sending_checknum: false,
-
+      snackbar_color: 'error',
       rules: {
         required: (value) => {
           this.input_error = false;
@@ -131,7 +131,7 @@ export default {
         return;
       }
       this.getAuthCode({
-        Type: this.register_type == 'tab-1' ? '2' : '1',
+        Type: this.login_type == 'tab-1' ? '2' : '1',
         ID: this.username
       }).then(response => {
         this.is_sending_checknum = true;
@@ -164,18 +164,22 @@ export default {
       }
 
       this.login({
-        Type: this.register_type == 'tab-1' ? '2' : '1',
+        Type: this.login_type == 'tab-1' ? '2' : '1',
         ID: this.username,
         Pwd: this.password,
         AuthCode: this.checknumber,
       }).then(response => {
-        console.log(response.data.Status)
-        if (response.data.Status == 0) {
-          this.$router.push({
-            name: 'Home'
-          })
+        if (response.data.Result.Status == 0) {
+          this.snackbar_color = 'success';
+          this.snackbar_text = '登录成功';
+          this.snackbar = true;
+          setTimeout(() => {
+            this.$router.push({
+              name: 'Home'
+            })
+          }, 2000)
         } else {
-          this.snackbar_text = response.data.FaultMsg;
+          this.snackbar_text = response.data.Result.FaultMsg;
           this.snackbar = true;
           this.is_loading = false;
         }

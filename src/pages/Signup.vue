@@ -48,7 +48,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <v-snackbar color="error" :timeout="3000" :top="'top'" v-model="snackbar">
+    <v-snackbar :color="snackbar_color" :timeout="3000" :top="'top'" v-model="snackbar">
       {{ snackbar_text }}
       <v-btn dark flat @click.native="snackbar = false">关闭</v-btn>
     </v-snackbar>
@@ -74,6 +74,7 @@ export default {
       snackbar: false,
       snackbar_text: '',
       nickname: '',
+      snackbar_color: 'error',
       rules: {
         required: (value) => {
           this.input_error = false;
@@ -199,13 +200,18 @@ export default {
         AuthCode: this.checknumber,
         Nick: this.nickname,
       }).then(response => {
-        console.log(response.data)
-        if (response.data.Status == 0) {
-          this.$router.push({
-            name: 'Signin'
-          })
+        if (response.data.Result.Status == 0) {
+          this.snackbar_color = 'success';
+          this.snackbar_text = '注册成功，请登录';
+          this.snackbar = true;
+          setTimeout(() => {
+            this.$router.push({
+              name: 'Signin'
+            })
+
+          }, 2000)
         } else {
-          this.snackbar_text = response.data.FaultMsg;
+          this.snackbar_text = response.data.Result.FaultMsg;
           this.snackbar = true;
           this.is_loading = false;
         }

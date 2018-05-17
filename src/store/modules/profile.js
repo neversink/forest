@@ -10,26 +10,26 @@ const getters = {
 }
 
 const actions = {
-  bindTelOrEmail({ dispatch, commit, state }, id) {
-    return api.bindTelOrEmail().then(response => {
+  bindTelOrEmail({ dispatch, commit, state }, param) {
+    return api.bindTelOrEmail(param).then(response => {
       commit(types.BIND_TEL_OR_EMAIL, { response });
       return response;
     });
   },
-  changePassword({ dispatch, commit, state }, id) {
-    return api.changePassword().then(response => {
+  changePassword({ dispatch, commit, state }, param) {
+    return api.changePassword(param).then(response => {
       commit(types.CHANGE_PASSWORD, { response });
       return response;
     });
   },
-  certify({ dispatch, commit, state }, id) {
-    return api.certify().then(response => {
+  certify({ dispatch, commit, state }, param) {
+    return api.certify(param).then(response => {
       commit(types.CERTIFY, { response });
       return response;
     });
   },
-  advancedCertify({ dispatch, commit, state }, id) {
-    return api.advancedCertify().then(response => {
+  advancedCertify({ dispatch, commit, state }, param) {
+    return api.advancedCertify(param).then(response => {
       commit(types.ADVANCED_CERTIFY, { response });
       return response;
     });
