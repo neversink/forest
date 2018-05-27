@@ -33,17 +33,17 @@ export default {
           color: 'blue-grey',
           href: 'Business'
         },
-        {
-          name: '交易',
-          icon: 'mdi-currency-usd',
-          color: 'brown',
-          href: 'Market'
-        }, {
-          name: '媒体',
-          icon: 'local_activity',
-          color: 'brown',
-          href: 'News'
-        },
+        // {
+        //   name: '交易',
+        //   icon: 'mdi-currency-usd',
+        //   color: 'brown',
+        //   href: 'Market'
+        // }, {
+        //   name: '媒体',
+        //   icon: 'local_activity',
+        //   color: 'brown',
+        //   href: 'News'
+        // },
         {
           name: '我的',
           icon: 'account_circle',

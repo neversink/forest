@@ -1,6 +1,6 @@
 <template>
   <div class="main-container">
-    <van-swipe :autoplay="3000" class="swipe">
+    <van-swipe :autoplay="3000" class="swipe" @change="on_swipe_change">
       <van-swipe-item>
         <img @click="goto_href()" class="swipe-item" src="../assets/img/house.jpg" />
       </van-swipe-item>
@@ -18,11 +18,14 @@
       <van-notice-bar @click="click_notice" class="notice-bar" :text="notice_text" left-icon="http://img.yzcdn.cn/public_files/2017/8/10/6af5b7168eed548100d9041f07b7c616.png" />
       <!-- <span class="index-num">指数</span> -->
       <div class="coin-info">
-        <template v-for="coin in coins">
+        <template v-for="coin in index">
           <div class="coin-item" :key="coin.type">
             <span class="body-2 coin-type">{{coin.type}}</span>
-            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}">{{coin.price}}</span>
-            <v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
+            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}"><div>
+              {{coin.price}}
+              <v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
+            </div>
+            </span>
             <span class="subheading coin-somewhat">{{coin.somewhat}}</span>
           </div>
         </template>
@@ -36,7 +39,8 @@
         </v-tab>
         <v-tabs-items>
           <v-tab-item v-for="i in 2" :key="i" :id="`tab-${i}`"> -->
-      <v-data-table :headers="headers" :items="items" class="elevation-1" dark hide-actions :pagination.sync="pagination">
+      <v-data-table :headers="headers" :items="indexDetail" class="elevation-1" dark hide-actions :pagination.sync="pagination">
+        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
           <td class="subheading" :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}">{{ props.item.type }}</td>
           <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">${{ props.item.price }}</td>
@@ -46,6 +50,10 @@
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}
         </template>
+        <div slot="no-data" class="text-xs-center" style="height:200px;align:center;margin-top:80px">
+          <v-progress-circular indeterminate color="amber"></v-progress-circular>
+          <br>数据加载中
+        </div>
       </v-data-table>
       <!--           </v-tab-item>
         </v-tabs-items>
@@ -62,6 +70,7 @@ export default {
     return {
       activated_tab: 'tab-1',
       notice_text: '32MB区块即将到来，BCH定于5月15日进行硬分叉，BCH网络将实现历史上最大的区块大小增长。',
+      interval_id: '',
       pagination: {
         sortBy: 'percent',
         descending: true,
@@ -163,43 +172,39 @@ export default {
     }
   },
   created() {
+    this.getIndex().then(response => {
+
+    }).catch(error => {
+
+    })
+    this.interval_id = setInterval(() => {
+      console.log('getIndex')
+      this.getIndex().then(response => {
+
+      }).catch(error => {
+
+      })
+    }, 3000)
     this.getNotice().then(response => {
       response.data.Item.forEach(item => {
         this.notice_text += item.Info
       })
     });
-    this.getIndex().then(response => {
-      let temp_coins = response.data.Items.map(item => {
-        return {
-          id: item.IndexItemID,
-          type: item.Name,
-          price: item.Index,
-          somewhat: item.Acc,
-          trend: item.Dir == 1 ? 'up' : 'down',
-        }
-      })
-      this.coins = temp_coins;
-      return temp_coins;
-    }).then(data => {
-      Promise.all(data.map(item => {
-        return this.getIndexDetail({ IndexItemID: item.id })
-      })).then(data => {
-        let temp_items = [];
-        data.map(item => {
-          if (item.data.Result.Status == 0) {
-            item.data.Items.forEach(item => {
-              temp_items.push({
-                type: item.Name,
-                price: item.Price,
-                percent: item.Index,
-                amount: item.DealNum,
-              })
-            })
-          }
-        })
-        this.items = temp_items;
-      })
+    // this.getIndex().then(response => {
+
+    // }).catch(error => {
+
+    // })
+    this.getIndexDetail({
+      'IndexItemID': 1
+    }).then(response => {
+
+    }).catch(error => {
+
     })
+  },
+  destroyed() {
+    clearInterval(this.interval_id)
   },
   computed: {
     ...mapGetters('home', [
@@ -233,6 +238,9 @@ export default {
         })
       }
     },
+    on_swipe_change(i) {
+      console.log(i)
+    }
   }
 }
 

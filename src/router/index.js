@@ -15,7 +15,7 @@ Vue.use(Router)
 
 export default new Router({
   routes: [{
-      path: '/',
+      path: '/start',
       name: 'Start',
       component: Start,
       children: [{
@@ -59,6 +59,7 @@ export default new Router({
     {
       path: '/signin',
       name: 'Signin',
+      alias: '/',
       component: Signin,
       meta: { index: 2 }
     },

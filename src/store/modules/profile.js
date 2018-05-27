@@ -34,6 +34,12 @@ const actions = {
       return response;
     });
   },
+    logout({ dispatch, commit, state }, param) {
+    return api.logout(param).then(response => {
+      commit(types.LOGOUT, { response });
+      return response;
+    });
+  },
 }
 
 const mutations = {
@@ -46,7 +52,7 @@ const mutations = {
   [types.CERTIFY](state, data) {
 
   },
-  [types.ADVANCED_CERTIFY](state, data) {
+  [types.LOGOUT](state, data) {
 
   },
 }

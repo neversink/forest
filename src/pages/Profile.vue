@@ -41,7 +41,7 @@
       </div>
       <v-layout justify-center>
         <v-flex class="quit-button" xs10>
-          <v-btn block color="amber lighten-4" large replace :to="{name:'Signin'}">退出登录</v-btn>
+          <v-btn block color="amber lighten-4" large replace @click.native="logout">退出登录</v-btn>
         </v-flex>
       </v-layout>
       <v-dialog v-model="show_dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
@@ -68,7 +68,13 @@
                 <template v-if="confirm_type == '高级认证'">
                   <v-flex xs11>
                     <van-uploader :after-read="onRead" style="margin-bottom: 20px">
-                      <v-icon large color="amber lighten-4">camera_alt</v-icon><span class="gold-text">点击选择图片</span>
+
+
+
+                      <span class="gold-text">请选择您本人正面手拿身份证复印件的照片</span><br><br>
+                      <v-icon large color="amber lighten-4">camera_alt</v-icon><span class="gold-text">点击选择图片<br>
+                    </span>
+
                     </van-uploader>
                     <br>
                     <template v-for="(i, index) in upload_photos">
@@ -127,7 +133,7 @@
                 </template>
                 <template v-if="confirm_type == '资金密码'">
                   <v-flex xs11>
-                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原资金密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
+                    <v-text-field v-if="confirm_action = '修改'":disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原资金密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
                     <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入新资金密码'" v-model="asset_pwd" key="asset_pwd"></v-text-field>
                     <v-text-field :disabled="is_loading" :rules="[rules.confirmpassword,]" dark clearable color="amber lighten-4" name="" :label="'请再次输入新资金密码'" v-model="asset_pwd2" class="input-content-idcard" key="asset_pwd2"></v-text-field>
                   </v-flex>
@@ -171,6 +177,7 @@ export default {
       name_error: false,
       idcard_error: false,
       confirm_type: '',
+      confirm_action: '',
       upload_photos: [],
       checknumber: '',
       countdown: '发送验证码',
@@ -295,14 +302,14 @@ export default {
           {
             icon: 'lock',
             title: '登录密码',
-            subtitle: '******',
+            subtitle: '已设置',
             action: '修改',
             enable: true
           }, {
             icon: 'mdi-cash-usd',
             title: '资金密码',
-            subtitle: '******',
-            action: '修改',
+            subtitle: this.IsGoogleAuth == 0 ? '未设置' : '已设置',
+            action: this.IsGoogleAuth == 0 ? '新增' : '修改',
             enable: true
           }
         ],
@@ -343,7 +350,7 @@ export default {
   },
   methods: {
     ...mapActions('profile', [
-      'bindTelOrEmail', 'changePassword', 'certify', 'advancedCertify'
+      'bindTelOrEmail', 'changePassword', 'certify', 'advancedCertify', 'logout'
     ]),
     show_snackbar(content, type) {
       this.snackbar_color = type;
@@ -360,6 +367,7 @@ export default {
     click_action(type, action) {
       console.log(type, action)
       this.confirm_type = type;
+      this.confirm_action = action;
       switch (type) {
         case '实名认证':
           this.name = '';
@@ -491,10 +499,10 @@ export default {
     advance_confirm() {
       this.is_loading = true;
       let temp_param = {};
+      temp_param['ID'] = this.ID;
       this.upload_photos.forEach((i, index) => {
-        temp['photo' + index] = i
+        temp_param['photo' + index] = i
       })
-      temp[ID] = this.ID;
       this.advancedCertify(temp_param)
         .then(response => {
           if (response.data.Result.Status == 0) {
@@ -534,6 +542,13 @@ export default {
         this.snackbar = true;
       })
     },
+    logout(){
+      this.logout().then(()=>{
+         this.$router.push({
+              name: 'Signin'
+            })
+      })
+    }
   }
 };
 

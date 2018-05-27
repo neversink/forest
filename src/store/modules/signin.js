@@ -27,18 +27,12 @@ const actions = {
       return response;
     });
   },
-  logout({ dispatch, commit, state }, param) {
-    api.logout().then(response => {
-      commit(types.LOGOUT, { response });
-    });
-  },
 }
 
 const mutations = {
   [types.LOGIN](state, data) {
     state.userinfo = data.response.data;
   },
-  [types.LOGOUT](state, data) {},
 }
 
 export default {

@@ -108,11 +108,20 @@ export default {
   getWallet(param) {
     return instance.post('GetWallet', qs.stringify(param))
   },
+  getMyEntrust(param) {
+    return instance.post('HoldEntrust', qs.stringify(param))
+  },
   getAvailableEntrustList(param) {
     return instance.post('GetUsedEntrust', qs.stringify(param))
   },
   getEntrustDetail(param) {
     return instance.post('GetEntrustQuery', qs.stringify(param))
+  },
+  buyEntrust(param) {
+    return instance.post('Entrust', qs.stringify(param))
+  },
+  convertPrice(param) {
+    return instance.post('PriceConvert', qs.stringify(param))
   },
   // 交易
   getStockInfo() {

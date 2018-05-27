@@ -124,6 +124,9 @@ export default {
     ...mapActions('signin', [
       'login'
     ]),
+    ...mapActions('signup', [
+      'getAuthCode'
+    ]),
     send_checknum() {
       if (!this.username) {
         this.snackbar_text = this.login_type == 'tab-1' ? '手机号码不能为空' : '邮箱地址不能为空';
@@ -150,19 +153,21 @@ export default {
       })
     },
     signin() {
-      this.is_loading = true;
-      if (!this.username || !this.password) {
+
+      if (!this.checknumber) {
+        this.snackbar_text = '验证码不能为空';
+        this.snackbar = true;
+        return;
+      } else if (!this.username || !this.password) {
         this.snackbar_text = '用户名和密码不能为空';
         this.snackbar = true;
-        this.is_loading = false;
         return;
       } else if (this.input_error) {
         this.snackbar_text = '请按照要求输入内容';
         this.snackbar = true;
-        this.is_loading = false;
         return;
       }
-
+      this.is_loading = true;
       this.login({
         Type: this.login_type == 'tab-1' ? '2' : '1',
         ID: this.username,
