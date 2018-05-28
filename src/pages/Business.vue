@@ -209,8 +209,9 @@
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
+            <button @click="swipe_swiper">click</button>
             <v-container fluid grid-list-md text-xs-center>
-              <van-swipe :show-indicators="false" @change.self="select_entrust">
+              <van-swipe :show-indicators="false" @change.self="select_entrust" ref="swipe">
                 <van-swipe-item v-for="current_item in current_items" style="200px">
                   <v-layout row wrap justify-center>
                     <v-flex xs12 class="title gold-text my-2">{{current_item.type}} </v-flex>
@@ -225,7 +226,7 @@
                     <!--  <v-flex xs9>
             <v-slider :disabled="is_loading" dark label="数量" :min="current_item.atleast" :max="max_amount" v-model="amount" :track-color="'grey lighten-2'" :thumb-color="'amber lighten-4'" :color="'amber lighten-4'"></v-slider>
           </v-flex> -->
-                    <v-flex xs12 class="my-4">
+                    <!-- <v-flex xs12 class="my-4">
                       <v-stepper vertical dark>
                         <v-stepper-step step="1" complete>
                           授权投标
@@ -237,21 +238,10 @@
                         <v-stepper-step step="3">退出成功<small>出借结束</small></v-stepper-step>
                         <v-stepper-content step="3"></v-stepper-content>
                       </v-stepper>
-                    </v-flex>
-                    <v-flex xs7 class="mt-2 mb-4">
-                      <v-spacer></v-spacer>
-                      <span class="gold-text">剩余可投入{{current_item_detail.RestCoinNum}} {{current_item_detail.CoinName}}</span>
-                      <!-- <v-progress-linear value="60" height="15" color="amber lighten-4" class="my-0"></v-progress-linear> -->
-                      <v-spacer></v-spacer>
-                    </v-flex>
-                    <!--       <v-flex xs3>
-                      <span class="gold-text">起投<br>金额</span>
                     </v-flex> -->
-                    <v-spacer></v-spacer>
-                    <v-flex xs4>
-                      <v-text-field color="amber lighten-4" :disabled="is_loading" label="请输入起投金额" dark v-model="trade_amount" type="number"></v-text-field>
+                    <v-flex xs10 class="mr-5">
+                      <v-text-field color="amber lighten-4" :disabled="is_loading" :label="'剩余可投入' + current_item_detail.RestCoinNum + ' ' + current_item_detail.CoinName" dark v-model="trade_amount" type="number"></v-text-field>
                     </v-flex>
-                    <v-spacer></v-spacer>
                     <v-flex class="quit-button" xs10>
                       <v-btn dark block color="amber lighten-4" style="color:black" large :loading="is_loading" :disabled="is_loading" @click.native.stop="ready_buy">立即投入</v-btn>
                     </v-flex>
@@ -537,6 +527,9 @@ export default {
 
         }
       })
+    },
+    swipe_swiper() {
+      this.$refs.swipe.autoPlay()
     }
   }
 }
