@@ -145,7 +145,15 @@ export default {
     return instance.post('Auth', qs.stringify(param))
   },
   advancedCertify(param) {
-    return instance.post('AdvAuto', qs.stringify(param))
+    let formData = new FormData();
+    for(let i in param) {
+      formData.append(i, param[i]);
+    }
+    return instance.post('AdvAuto', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }
+    })
   },
 
 

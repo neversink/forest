@@ -2,7 +2,7 @@
   <v-app>
     <div class="main-container">
       <div class="personal-info">
-        <img class="avatar" src="../assets/img/avatar.png">
+        <img class="avatar" src="../assets/img/icon.png">
         <!-- <br> -->
         <!-- <br> -->
         <!-- <span class="username gold-text title">{{Nick}}</span> -->
@@ -62,19 +62,15 @@
                     <v-text-field :disabled="is_loading" :rules="[rules.idcard,]" dark clearable color="amber lighten-4" name="" :label="'请输入身份证号码'" v-model="idcard" class="input-content-idcard" key="idcard"></v-text-field>
                   </v-flex>
                   <v-flex xs11>
-                    <v-btn @click.native="base_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>认证</v-btn>
+                    <v-btn style="margin-bottom: 50px" @click.native="base_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button mb-6" color="amber lighten-4" large>认证</v-btn>
                   </v-flex>
                 </template>
                 <template v-if="confirm_type == '高级认证'">
                   <v-flex xs11>
                     <van-uploader :after-read="onRead" style="margin-bottom: 20px">
-
-
-
                       <span class="gold-text">请选择您本人正面手拿身份证复印件的照片</span><br><br>
                       <v-icon large color="amber lighten-4">camera_alt</v-icon><span class="gold-text">点击选择图片<br>
                     </span>
-
                     </van-uploader>
                     <br>
                     <template v-for="(i, index) in upload_photos">
@@ -82,7 +78,7 @@
                     </template>
                   </v-flex>
                   <v-flex xs11>
-                    <v-btn @click.native="advance_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button mb-6" color="amber lighten-4" large>认证</v-btn>
+                    <v-btn style="margin-bottom: 50px" @click.native="advance_confirm" :loading="is_loading" :disabled="is_loading" block class="login-button mb-6" color="amber lighten-4" large>认证</v-btn>
                   </v-flex>
                 </template>
                 <template v-if="confirm_type == '邮箱'">
@@ -248,7 +244,7 @@ export default {
   },
   computed: {
     ...mapGetters('signin', [
-      'ID', 'Nick', 'StarLevel', 'IsAuth', 'AuthInfo', 'IsAdvAuth', 'SecrLevel', 'IsEmalBind', 'IsPhoneBind', 'IsGoogleAuth'
+      'ID', 'Nick', 'StarLevel', 'IsAuth', 'AuthInfo', 'IsAdvAuth', 'SecrLevel', 'IsEmalBind', 'IsPhoneBind', 'IsGoogleAuth','IsAccPwdEmpty'
     ]),
   },
   watch: {
@@ -308,8 +304,8 @@ export default {
           }, {
             icon: 'mdi-cash-usd',
             title: '资金密码',
-            subtitle: this.IsGoogleAuth == 0 ? '未设置' : '已设置',
-            action: this.IsGoogleAuth == 0 ? '新增' : '修改',
+            subtitle: this.IsAccPwdEmpty == 0 ? '未设置' : '已设置',
+            action: this.IsAccPwdEmpty == 0 ? '新增' : '修改',
             enable: true
           }
         ],
@@ -464,7 +460,7 @@ export default {
     change_asset_pwd() {
       this.is_loading = true;
       this.changePassword({
-        Type: '1',
+        Type: '2',
         ID: this.ID,
         From: this.asset_pwd_old,
         To: this.asset_pwd,
@@ -499,7 +495,7 @@ export default {
     advance_confirm() {
       this.is_loading = true;
       let temp_param = {};
-      temp_param['ID'] = this.ID;
+      // temp_param['ID'] = this.ID;
       this.upload_photos.forEach((i, index) => {
         temp_param['photo' + index] = i
       })
@@ -619,9 +615,9 @@ export default {
 
 .avatar {
   /*margin-top: 20px;*/
-  width: 100px;
-  height: 100px;
-  border-radius: 100px
+  width: 60px;
+  height: 60px;
+  border-radius: 60px;
 }
 
 .input-content-username {

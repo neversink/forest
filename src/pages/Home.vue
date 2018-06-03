@@ -21,24 +21,53 @@
         <template v-for="coin in index">
           <div class="coin-item" :key="coin.type">
             <span class="body-2 coin-type">{{coin.type}}</span>
-            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}"><div>
+            <br>
+            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}">
+              <span>
               {{coin.price}}
-              <v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
-            </div>
+              <br><v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
             </span>
+            </span>
+            <br>
             <span class="subheading coin-somewhat">{{coin.somewhat}}</span>
           </div>
         </template>
       </div>
     </div>
-    <div>
-      <!--       <v-tabs centered color="grey darken-3" slot="extension" v-model="activated_tab" grow height="40">
+    <div v-if="indexSpecial != null" class="index-num-content">
+      <v-tabs centered color="grey darken-3" slot="extension" v-model="activated_tab" grow height="40">
         <v-tabs-slider color="amber lighten-4"></v-tabs-slider>
-        <v-tab v-for="i in 2" :key="i" :href="`#tab-${i}`">
-          <span class="gold-text">{{ i == 1 ? '涨跌榜' : '成交榜'}}</span>
+        <v-tab v-for="(val,key,index) in indexSpecial" :key="index" :href="`#tab-${index}`">
+          <span class="gold-text">{{ key }}</span>
         </v-tab>
         <v-tabs-items>
-          <v-tab-item v-for="i in 2" :key="i" :id="`tab-${i}`"> -->
+          <v-tab-item v-for="(val,key,index) in indexSpecial" :key="index" :id="`tab-${index}`">
+            <v-card>
+              <v-list class="list-background">
+                <template v-for="(i ,index) in val">
+                  <v-list-tile :key="i.IndexItemID" avatar @click="">
+                    <v-list-tile-avatar>
+                      <span class="gold-text">{{i.Name}}</span>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content class="ml-3">
+                      <v-list-tile-title><span :class="['buy-text', 'body-1']">最高：{{ i.High }}</span></v-list-tile-title>
+                      <v-list-tile-sub-title><span :class="['sell-text', 'body-1']">最低：{{i.Low}}</span></v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <big class="Medium gold-text">${{i.USDIndex}}</big>
+                      <small class="body-1 grey-text">成交手数{{i.Hand}}</small>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-divider dark inset v-if="index + 1< val.length" :key="index"></v-divider>
+                </template>
+              </v-list>
+            </v-card>
+            </v-card>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-tabs>
+    </div>
+    <div>
       <v-data-table :headers="headers" :items="indexDetail" class="elevation-1" dark hide-actions :pagination.sync="pagination">
         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
@@ -55,9 +84,6 @@
           <br>数据加载中
         </div>
       </v-data-table>
-      <!--           </v-tab-item>
-        </v-tabs-items>
-      </v-tabs> -->
     </div>
   </div>
 </template>
@@ -68,7 +94,7 @@ export default {
   name: 'Home',
   data() {
     return {
-      activated_tab: 'tab-1',
+      activated_tab: 'tab-0',
       notice_text: '32MB区块即将到来，BCH定于5月15日进行硬分叉，BCH网络将实现历史上最大的区块大小增长。',
       interval_id: '',
       pagination: {
@@ -184,7 +210,7 @@ export default {
       }).catch(error => {
 
       })
-    }, 3000)
+    }, 10000)
     this.getNotice().then(response => {
       response.data.Item.forEach(item => {
         this.notice_text += item.Info
@@ -195,20 +221,20 @@ export default {
     // }).catch(error => {
 
     // })
-    this.getIndexDetail({
-      'IndexItemID': 1
-    }).then(response => {
+    // this.getIndexDetail({
+    //   'IndexItemID': 1
+    // }).then(response => {
 
-    }).catch(error => {
+    // }).catch(error => {
 
-    })
+    // })
   },
   destroyed() {
     clearInterval(this.interval_id)
   },
   computed: {
     ...mapGetters('home', [
-      'notice', 'index', 'indexDetail'
+      'notice', 'index', 'indexDetail', 'indexSpecial'
     ]),
   },
   watch: {
@@ -279,6 +305,10 @@ export default {
   color: #FFECB3;
 }
 
+.grey-text {
+  color: #E0E0E0;
+}
+
 .index-num-content {
   background-color: #424242;
   margin: 15px 0;
@@ -295,13 +325,30 @@ export default {
 }
 
 .coin-item {
-  width: 120px;
+  max-width: 130px;
   margin: 0 10px 15px 10px;
 }
 
 .notice-bar {
   color: #FFE082;
   /*color: #BDBDBD;*/
+  background-color: #424242;
+}
+
+.list-background {
+  background-color: #424242;
+}
+
+.buy-text {
+  color: #EF5350;
+}
+
+.sell-text {
+  color: #66BB6A;
+  /*color: #01579B;*/
+}
+
+.application .theme--light.list, .theme--light .list{
   background-color: #424242;
 }
 

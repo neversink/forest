@@ -34,7 +34,7 @@ const actions = {
       return response;
     });
   },
-    logout({ dispatch, commit, state }, param) {
+  logout({ dispatch, commit, state }, param) {
     return api.logout(param).then(response => {
       commit(types.LOGOUT, { response });
       return response;

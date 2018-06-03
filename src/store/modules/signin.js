@@ -17,7 +17,7 @@ const getters = {
   IsEmalBind: state => state.userinfo.IsEmalBind,
   IsPhoneBind: state => state.userinfo.IsPhoneBind,
   IsGoogleAuth: state => state.userinfo.IsGoogleAuth,
-
+  IsAccPwdEmpty: state => state.userinfo.IsAccPwdEmpty
 }
 
 const actions = {
