@@ -2,16 +2,13 @@
   <div class="main-container">
     <van-swipe :autoplay="3000" class="swipe" @change="on_swipe_change">
       <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/house.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/banner1.png" />
       </van-swipe-item>
       <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/plane.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/banner2.png" />
       </van-swipe-item>
       <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/section.jpg" />
-      </van-swipe-item>
-      <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/sunshine.jpg" />
+        <img @click="goto_href()" class="swipe-item" src="../assets/img/banner3.png" />
       </van-swipe-item>
     </van-swipe>
     <div class="index-num-content">
@@ -35,7 +32,7 @@
       </div>
     </div>
     <div v-if="indexSpecial != null" class="index-num-content">
-      <v-tabs centered color="grey darken-3" slot="extension" v-model="activated_tab" grow height="40">
+      <v-tabs centered color="transparent" slot="extension" v-model="activated_tab" grow height="40">
         <v-tabs-slider color="amber lighten-4"></v-tabs-slider>
         <v-tab v-for="(val,key,index) in indexSpecial" :key="index" :href="`#tab-${index}`">
           <span class="gold-text">{{ key }}</span>
@@ -68,7 +65,7 @@
       </v-tabs>
     </div>
     <div>
-      <v-data-table :headers="headers" :items="indexDetail" class="elevation-1" dark hide-actions :pagination.sync="pagination">
+      <v-data-table :headers="headers" :items="indexDetail" class="elevation-1 transparent" dark hide-actions :pagination.sync="pagination">
         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
           <td class="subheading" :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}">{{ props.item.type }}</td>
@@ -107,7 +104,7 @@ export default {
           text: '币种',
           align: 'left',
           sortable: true,
-          value: 'type'
+          value: 'type',
         },
         { text: '最新价', value: 'price', align: 'center', },
         { text: '涨跌幅', value: 'percent', align: 'center', },
@@ -310,7 +307,7 @@ export default {
 }
 
 .index-num-content {
-  background-color: #424242;
+  background-color: #42424244;
   margin: 15px 0;
 }
 
@@ -325,18 +322,19 @@ export default {
 }
 
 .coin-item {
-  max-width: 130px;
+  width: 33%;
+  max-width: 33%;
   margin: 0 10px 15px 10px;
 }
 
 .notice-bar {
   color: #FFE082;
   /*color: #BDBDBD;*/
-  background-color: #424242;
+  background-color: transparent;
 }
 
 .list-background {
-  background-color: #424242;
+  background-color: #42424244;
 }
 
 .buy-text {
@@ -348,12 +346,31 @@ export default {
   /*color: #01579B;*/
 }
 
-.application .theme--light.list, .theme--light .list{
-  background-color: #424242;
+.application .theme--light.list,
+.theme--light .list {
+  background-color: transparent;
 }
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.application .theme--light.card,
+.theme--light .card {
+  background-color: transparent;
+  color: rgba(0, 0, 0, .87);
+}
+
+.application .theme--dark.table,
+.theme--dark .table {
+  background-color: transparent;
+  color: #fff;
+}
+
+.application .theme--light.table,
+.theme--light .table {
+  background-color: transparent;
+  color: rgba(0, 0, 0, .87);
 }
 
 </style>

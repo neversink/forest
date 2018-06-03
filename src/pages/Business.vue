@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-container">
     <v-tabs slot="extension" centered v-model="activated_tab" slider-color="amber lighten-4" color="transparent" grow height="40">
       <v-tab v-for="item in categarys" :key="item">
         <span class="gold-text">{{ item }}</span>
@@ -15,14 +15,24 @@
       <!-- <div style="height:10px;background-color:#424242;"></div> -->
       <v-tabs-items v-model="activated_tab">
         <v-tab-item>
-          <v-card color="grey darken-3">
+          <v-card color="transparent">
             <v-layout row wrap>
               <v-flex xs12>
-                <v-card color="grey darken-4">
+                <v-card style="background-color:#21212177">
                   <v-container text-xs-center class="pb-0 mb-0">
                     <v-layout justify-center row wrap>
                       <v-flex xs12 class="caption grey-text">总收益</v-flex>
                       <v-flex xs12 class="headline gold-text">{{total_earn}}</v-flex>
+                      <v-flex xs4 class="my-2 ml-2">
+                        <v-btn color="amber lighten-4" @click.native="take_in">
+                          充币
+                        </v-btn>
+                      </v-flex>
+                      <v-flex xs4 class="my-2 mr-2">
+                        <v-btn color="amber lighten-4" @click.native="take_out">
+                          提币
+                        </v-btn>
+                      </v-flex>
                       <v-flex xs6 class="my-2">
                         <v-btn block flat :color="wallet_type == 0 ? 'amber lighten-4':'grey darken-2'" @click.native="wallet_type = 0">
                           资产管理
@@ -30,7 +40,7 @@
                       </v-flex>
                       <v-flex xs6 class="my-2">
                         <v-btn block flat :color="wallet_type == 1 ? 'amber lighten-4':'grey darken-2'" @click.native="wallet_type = 1">
-                          交易记录
+                          持有币
                         </v-btn>
                       </v-flex>
                     </v-layout>
@@ -41,14 +51,14 @@
             <v-container v-show="wallet_type == 0" fluid style="min-height: 0;" grid-list-lg>
               <v-layout row wrap>
                 <v-flex xs12 v-for="(i ,index) in assets" :key="index">
-                  <v-card color="grey darken-4">
+                  <v-card style="background-color:#212121AA">
                     <v-container text-xs-center>
                       <v-layout justify-center row wrap>
                         <v-flex xs12 class="headline gold-text">{{i.type}}</v-flex>
                         <v-flex xs6 class="caption grey-text py-0">持有</v-flex>
                         <v-flex xs6 class="caption grey-text py-0">占比</v-flex>
-                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.proportion}}</span></v-flex>
-                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.conceive}}<small>%</small></span></v-flex>
+                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.conceive}}</span></v-flex>
+                        <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.proportion}}<small>%</small></span></v-flex>
                         <transition name="van-fade">
                           <v-flex xs12 class="headline gold-text" v-if="hold_entrust_list && i.type == '持有委托'">
                             <template v-for="(i ,index) in my_entrusts">
@@ -103,13 +113,13 @@
             </v-card>
           </v-card>
         </v-tab-item>
-        <v-tab-item class="grey darken-4">
-          <v-card color="grey darken-2" v-for="(i ,index) in entrusts" class="my-3 mx-3" :key="index">
+        <v-tab-item>
+          <v-card style="background-color:#21212188" v-for="(i ,index) in entrusts" class="my-3 mx-3" :key="index">
             <v-container fluid grid-list-lg class="px-0 pb-0 pt-2">
               <v-layout row wrap>
                 <v-flex xs12 class="title gold-text px-3">{{i.groupname}} <small class="grey-text">{{i.count}}款</small></v-flex>
                 <v-flex xs12>
-                  <v-card color="grey darken-3">
+                  <v-card style="background-color:#212121AA">
                     <v-card-title primary-title>
                       <v-container text-xs-center class="py-0 my-0">
                         <v-layout justify-center row wrap>
@@ -128,9 +138,9 @@
                   </v-card>
                 </v-flex>
               </v-layout>
-              <v-card-actions class="grey darken-2 pt-0">
+              <v-card-actions class="pt-0">
                 <v-spacer></v-spacer>
-                <v-btn block flat dark @click.native="wanna_buy(i.items)"><span class="gold-text">查看更多 ></span></v-btn>
+                <v-btn style="background-color:#212121AA" block flat dark @click.native="wanna_buy(i.items)"><span class="gold-text">查看更多 ></span></v-btn>
                 <v-spacer></v-spacer>
               </v-card-actions>
             </v-container>
@@ -203,7 +213,7 @@
         </v-tab-item> -->
       </v-tabs-items>
       <v-dialog v-model="show_dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
-        <v-card tile class="grey darken-4">
+        <v-card tile class="main-container">
           <v-toolbar class="grey darken-4" dark dense>
             <v-btn icon @click.native="show_dialog = false" dark>
               <v-icon color="amber lighten-3">close</v-icon>
@@ -258,12 +268,10 @@
       <v-dialog v-model="confirm_dialog" max-width="600" persistent>
         <v-card dark>
           <v-card-title>
-            <v-btn flat @click.native="confirm_dialog = false">
+            <v-btn flat absolute @click.native="confirm_dialog = false">
               <v-icon color="amber lighten-3">close</v-icon>
-            </v-btn> <span class="headline gold-text " style="margin: 0 auto">确认付款</span>
-            <v-btn flat>
-              <v-icon color="amber lighten-3"></v-icon>
             </v-btn>
+            <span class="headline gold-text " style="margin: 0 auto">确认付款</span>
           </v-card-title>
           <v-card-text ml-2>您购买的 <big class="gold-text">{{current_item.type}}</big></v-card-text>
           <v-card-text ml-2><big class="gold-text">总价：</big>{{trade_amount}} {{current_item_detail.CoinName}}</v-card-text>
@@ -284,6 +292,58 @@
             <!-- <v-spacer></v-spacer> -->
             <v-btn color="amber lighten-4" :disabled="is_trading" @click.native="real_buy" class="real-buy-btn mb-3" large block>投入</v-btn>
             <!-- <v-btn dark color="red darken-2" >取消</v-btn> -->
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="take_in_dialog" max-width="600" persistent>
+        <v-card dark>
+          <v-card-title>
+            <v-btn flat absolute @click.native="take_in_dialog = false">
+              <v-icon color="amber lighten-3">close</v-icon>
+            </v-btn>
+            <span class="headline gold-text " style="margin: 0 auto">充币</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入充币数量'" v-model="take_in_count" class="input-content-tradeid" key="take_in_count"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入充币地址'" v-model="take_in_addr" class="input-content-tradeid" key="take_in_addr"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="take_in_pwd" class="input-content-tradepwd" key="take_in_pwd"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <!-- <v-spacer></v-spacer> -->
+            <v-btn dark color="amber lighten-4" :disabled="is_trading" @click.native="real_take_in" class="mb-3 grey-text" large block>确认充值</v-btn>
+            <!-- <v-btn dark color="red darken-2" >取消</v-btn> -->
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="take_out_dialog" max-width="600" persistent>
+        <v-card dark>
+          <v-card-title>
+            <v-btn flat absolute @click.native="take_out_dialog = false">
+              <v-icon color="amber lighten-3">close</v-icon>
+            </v-btn>11
+            <span class="headline gold-text " style="margin: 0 auto">提币</span>
+          </v-card-title>
+          <v-card-text>
+            <v-container grid-list-md>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-text-field disabled dark color="amber lighten-4" v-model="take_out_addr" textarea class="input-content-tradeid" key="take_out_addr"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="amber lighten-4" @click.native="real_take_out" class="mb-3 grey-text" large block>点击复制</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -366,7 +426,13 @@ export default {
         { id: '3', type: '蒲公英30天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', hold: '13', time: '30', atleast: '5000', expmoney: 'yes' },
         { id: '4', type: '木棉花7天方案', benefit: '22.3', benefit_add: '', timebenefit_add_type: '+', hold: '1111', time: '7', atleast: '10000', expmoney: 'yes' },
         { id: '5', type: '新手万元户投标方案', benefit: '22.3', benefit_add: '5', benefit_add_type: '+', hold: '12222', time: '7', atleast: '1000', expmoney: 'yes' },
-      ]
+      ],
+      take_in_dialog: false,
+      take_out_dialog: false,
+      take_in_count: '',
+      take_in_addr: '',
+      take_in_pwd: '',
+      take_out_addr: 'P5J3SBZEW8ynx1B9ca6RzqYDfKj4q4K6zkicxqqfU5bNPe',
     }
   },
   computed: {
@@ -574,8 +640,21 @@ export default {
       } else {
         return i
       }
-    }
-
+    },
+    take_in() {
+      this.take_in_dialog = true;
+    },
+    take_out() {
+      this.take_out_dialog = true;
+    },
+    real_take_in() {
+      this.take_in_dialog = false;
+      this.is_trading = false;
+    },
+    real_take_out() {
+      this.take_out_dialog = false;
+      this.toast('复制成功')
+    },
   }
 }
 
@@ -620,6 +699,16 @@ export default {
 .real-buy-btn {
   color: #212121;
   margin: 0 30px 10px;
+}
+
+.application .theme--light.card,
+.theme--light .card {
+  background-color: transparent;
+}
+
+.application .theme--dark.btn,
+.theme--dark .btn {
+  color: #212121;
 }
 
 </style>

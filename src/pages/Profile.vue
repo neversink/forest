@@ -45,7 +45,7 @@
         </v-flex>
       </v-layout>
       <v-dialog v-model="show_dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
-        <v-card tile class="grey darken-4">
+        <v-card tile class="main-container">
           <v-toolbar class="grey darken-4" dark dense>
             <v-btn icon @click.native="show_dialog = false" dark>
               <v-icon color="amber lighten-3">close</v-icon>
@@ -559,10 +559,6 @@ export default {
   background-color: rgba(0, 0, 0, 0.3);
 }
 
-.main-container {
-  background-image: url(../assets/img/road.jpg);
-  background-size: cover;
-}
 
 .list-hr {
   border: none;

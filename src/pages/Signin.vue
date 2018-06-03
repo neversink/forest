@@ -148,6 +148,7 @@ export default {
           }
         }, 1000)
       }).catch(error => {
+        console.log(error)
         this.snackbar_text = '发送验证码失败';
         this.snackbar = true;
       })

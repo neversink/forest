@@ -12,9 +12,13 @@ const getters = {
 }
 
 const actions = {
-  register({ dispatch, commit, state }, param) {
+  register({ dispatch, commit, state }, param, rootState) {
     return api.register(param).then(response => {
       commit(types.REGISTER, { response });
+      if (response.data.Result.Status == 0) {
+        console.log('sigin/' + types.LOGIN)
+        commit('signin/' + types.LOGIN, response, { root: true })
+      }
       return response;
     });
   },

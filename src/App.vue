@@ -24,7 +24,6 @@ export default {
 
 </script>
 <style>
-
 .gold-text {
   color: #FFECB3;
 }
@@ -37,7 +36,8 @@ body {
 }
 
 .main-container {
-  background-color: #212121;
+  background-image: url(./assets/img/backgroud.png);
+  background-size: cover;
 }
 
 .application .theme--light.list,

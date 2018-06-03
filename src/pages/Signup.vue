@@ -206,7 +206,7 @@ export default {
           this.snackbar = true;
           setTimeout(() => {
             this.$router.push({
-              name: 'Signin'
+              name: 'Home'
             })
 
           }, 2000)
