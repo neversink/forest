@@ -123,6 +123,12 @@ export default {
   convertPrice(param) {
     return instance.post('PriceConvert', qs.stringify(param))
   },
+  queryRecharge(param) {
+    return instance.post('AddFundsType', qs.stringify(param))
+  },
+  recharge(param) {
+    return instance.post('AddFunds', qs.stringify(param))
+  },
   // 交易
   getStockInfo() {
     return instance.get('', {
@@ -146,7 +152,7 @@ export default {
   },
   advancedCertify(param) {
     let formData = new FormData();
-    for(let i in param) {
+    for (let i in param) {
       formData.append(i, param[i]);
     }
     return instance.post('AdvAuto', formData, {

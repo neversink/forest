@@ -138,7 +138,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters('signin', [
+      'IsAccPwdEmpty'
+    ]),
   },
   watch: {
 
@@ -147,6 +149,7 @@ export default {
     ...mapActions('signup', [
       'register', 'getAuthCode'
     ]),
+
     change_password_visible() {
       this.e1 = !this.e1
     },
@@ -202,14 +205,22 @@ export default {
       }).then(response => {
         if (response.data.Result.Status == 0) {
           this.snackbar_color = 'success';
-          this.snackbar_text = '注册成功，请登录';
+          this.snackbar_text = '注册成功';
           this.snackbar = true;
-          setTimeout(() => {
-            this.$router.push({
-              name: 'Home'
-            })
-
-          }, 2000)
+          if (this.IsAccPwdEmpty == 0) {
+            this.$toast('请先设置交易密码');
+            setTimeout(() => {
+              this.$router.push({
+                name: 'Profile'
+              })
+            }, 2000)
+          } else {
+            setTimeout(() => {
+              this.$router.push({
+                name: 'Home'
+              })
+            }, 2000)
+          }
         } else {
           this.snackbar_text = response.data.Result.FaultMsg;
           this.snackbar = true;

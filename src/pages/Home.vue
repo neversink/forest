@@ -19,10 +19,10 @@
           <div class="coin-item" :key="coin.type">
             <span class="body-2 coin-type">{{coin.type}}</span>
             <br>
-            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#EF5350' : '#66BB6A'}">
+            <span class="title coin-price" :style="{ color: coin.trend == 'up'?'#66BB6A' : '#EF5350'}">
               <span>
               {{coin.price}}
-              <br><v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'deep-orange darken-4': 'green lighten-1'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
+              <br><v-icon style="margin-left:-5px;padding-bottom:3px;" :color="coin.trend =='up'?'green lighten-1': 'deep-orange darken-4'">{{ coin.trend =='up'?'mdi-menu-up' : 'mdi-menu-down'}}</v-icon>
             </span>
             </span>
             <br>
@@ -68,10 +68,10 @@
       <v-data-table :headers="headers" :items="indexDetail" class="elevation-1 transparent" dark hide-actions :pagination.sync="pagination">
         <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
         <template slot="items" slot-scope="props">
-          <td class="subheading" :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}">{{ props.item.type }}</td>
-          <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">${{ props.item.price }}</td>
-          <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">{{(props.item.percent > 0 ?'+' : '') + props.item.percent }}%</td>
-          <td :style="{ color: props.item.percent > 0 ?'#EF5350' : '#66BB6A'}" class="text-xs-right subheading">{{ props.item.amount }}</td>
+          <td class="subheading" :style="{ color: props.item.percent > 0 ?'#66BB6A' : '#EF5350'}">{{ props.item.type }}</td>
+          <td :style="{ color: props.item.percent > 0 ?'#66BB6A' : '#EF5350'}" class="text-xs-right subheading">${{ props.item.price }}</td>
+          <td :style="{ color: props.item.percent > 0 ?'#66BB6A' : '#EF5350'}" class="text-xs-right subheading">{{(props.item.percent > 0 ?'+' : '') + props.item.percent }}%</td>
+          <td :style="{ color: props.item.percent > 0 ?'#66BB6A' : '#EF5350'}" class="text-xs-right subheading">{{ props.item.amount }}</td>
         </template>
         <template slot="pageText" slot-scope="{ pageStart, pageStop }">
           From {{ pageStart }} to {{ pageStop }}
@@ -338,11 +338,11 @@ export default {
 }
 
 .buy-text {
-  color: #EF5350;
+  color: #66BB6A;
 }
 
 .sell-text {
-  color: #66BB6A;
+  color: #EF5350;
   /*color: #01579B;*/
 }
 

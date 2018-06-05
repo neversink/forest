@@ -46,6 +46,18 @@ const actions = {
       return response;
     });
   },
+  queryRecharge({ dispatch, commit, state }, param) {
+    return api.queryRecharge(param).then(response => {
+      commit(types.QUERY_RECHARGE, { response });
+      return response;
+    });
+  },
+  recharge({ dispatch, commit, state }, param) {
+    return api.recharge(param).then(response => {
+      commit(types.RECHARGE, { response });
+      return response;
+    });
+  },
 }
 
 const mutations = {
@@ -65,6 +77,12 @@ const mutations = {
 
   },
   [types.CONVERT_PRICE](state, data) {
+
+  },
+  [types.QUERY_RECHARGE](state, data) {
+
+  },
+  [types.RECHARGE](state, data) {
 
   },
 }

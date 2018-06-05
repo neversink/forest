@@ -115,7 +115,9 @@ export default {
     }
   },
   computed: {
-
+    ...mapGetters('signin', [
+      'IsAccPwdEmpty'
+    ]),
   },
   watch: {
 
@@ -154,7 +156,6 @@ export default {
       })
     },
     signin() {
-
       if (!this.checknumber) {
         this.snackbar_text = '验证码不能为空';
         this.snackbar = true;
@@ -177,13 +178,26 @@ export default {
       }).then(response => {
         if (response.data.Result.Status == 0) {
           this.snackbar_color = 'success';
-          this.snackbar_text = '登录成功';
-          this.snackbar = true;
-          setTimeout(() => {
-            this.$router.push({
-              name: 'Home'
-            })
-          }, 2000)
+          console.log(this.IsAccPwdEmpty)
+          if (this.IsAccPwdEmpty == 0) {
+            this.snackbar_text = '登录成功';
+            this.$toast('请先设置交易密码');
+            this.snackbar = true;
+            setTimeout(() => {
+              this.$router.push({
+                name: 'Profile'
+              })
+            }, 2000)
+          } else {
+            this.snackbar_text = '登录成功';
+            this.snackbar = true;
+            setTimeout(() => {
+              this.$router.push({
+                name: 'Home'
+              })
+            }, 2000)
+          }
+
         } else {
           this.snackbar_text = response.data.Result.FaultMsg;
           this.snackbar = true;

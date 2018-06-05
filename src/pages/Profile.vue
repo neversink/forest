@@ -68,7 +68,9 @@
                 <template v-if="confirm_type == '高级认证'">
                   <v-flex xs11>
                     <van-uploader :after-read="onRead" style="margin-bottom: 20px">
-                      <span class="gold-text">请选择您本人正面手拿身份证复印件的照片</span><br><br>
+                      <span class="gold-text">请选择您本人正面手拿身份证复印件的照片</span>
+                      <br>
+                      <br>
                       <v-icon large color="amber lighten-4">camera_alt</v-icon><span class="gold-text">点击选择图片<br>
                     </span>
                     </van-uploader>
@@ -129,7 +131,7 @@
                 </template>
                 <template v-if="confirm_type == '资金密码'">
                   <v-flex xs11>
-                    <v-text-field v-if="confirm_action = '修改'":disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原资金密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
+                    <v-text-field v-if="confirm_action = '修改'" :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原资金密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
                     <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入新资金密码'" v-model="asset_pwd" key="asset_pwd"></v-text-field>
                     <v-text-field :disabled="is_loading" :rules="[rules.confirmpassword,]" dark clearable color="amber lighten-4" name="" :label="'请再次输入新资金密码'" v-model="asset_pwd2" class="input-content-idcard" key="asset_pwd2"></v-text-field>
                   </v-flex>
@@ -244,7 +246,7 @@ export default {
   },
   computed: {
     ...mapGetters('signin', [
-      'ID', 'Nick', 'StarLevel', 'IsAuth', 'AuthInfo', 'IsAdvAuth', 'SecrLevel', 'IsEmalBind', 'IsPhoneBind', 'IsGoogleAuth','IsAccPwdEmpty'
+      'ID', 'Nick', 'StarLevel', 'IsAuth', 'AuthInfo', 'IsAdvAuth', 'SecrLevel', 'IsEmalBind', 'IsPhoneBind', 'IsGoogleAuth', 'IsAccPwdEmpty'
     ]),
   },
   watch: {
@@ -303,7 +305,7 @@ export default {
             enable: true
           }, {
             icon: 'mdi-cash-usd',
-            title: '资金密码',
+            title: '交易密码',
             subtitle: this.IsAccPwdEmpty == 0 ? '未设置' : '已设置',
             action: this.IsAccPwdEmpty == 0 ? '新增' : '修改',
             enable: true
@@ -313,13 +315,14 @@ export default {
       qtne_items: {
         title: '其他内容',
         subtitle: '',
-        content: [{
-            icon: 'face',
-            title: '在线客服',
-            subtitle: 'forest@forest.com',
-            action: '在线咨询',
-            enable: true
-          },
+        content: [
+          // {
+          //     icon: 'face',
+          //     title: '在线客服',
+          //     subtitle: 'forest@forest.com',
+          //     action: '在线咨询',
+          //     enable: true
+          //   },
           {
             icon: 'mdi-at',
             title: '邮件咨询',
@@ -327,13 +330,13 @@ export default {
             action: '发送邮件',
             enable: true
           },
-          {
-            icon: 'mdi-phone-in-talk',
-            title: '电话咨询',
-            subtitle: '123456',
-            action: '拨打电话',
-            enable: true
-          },
+          // {
+          //   icon: 'mdi-phone-in-talk',
+          //   title: '电话咨询',
+          //   subtitle: '123456',
+          //   action: '拨打电话',
+          //   enable: true
+          // },
           // {
           //   icon: 'mdi-cached',
           //   title: '清除缓存',
@@ -538,11 +541,11 @@ export default {
         this.snackbar = true;
       })
     },
-    logout(){
-      this.logout().then(()=>{
-         this.$router.push({
-              name: 'Signin'
-            })
+    logout() {
+      this.logout().then(() => {
+        this.$router.push({
+          name: 'Signin'
+        })
       })
     }
   }

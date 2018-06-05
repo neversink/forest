@@ -115,7 +115,7 @@ function handle_price(n) {
 }
 
 function handle_percent(n) {
-  if (n > 0) {
+  if (n) {
     // let temp = +n * 100 + '';
     let temp = +n * 1 + '';
     return temp.substring(0, temp.indexOf('.') + 4)
