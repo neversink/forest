@@ -136,6 +136,7 @@
                           <v-flex xs12 class="gold-text py-0">
                             <v-chip v-if="i.items[0].expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
                             <v-chip v-if="i.items[0].atleast" small color="amber lighten-4" text-color="grey darken-4">{{i.items[0].atleast}}起投</v-chip>
+                            <v-chip v-if="i.items[0].atmost" small color="amber lighten-4" text-color="grey darken-4">{{i.items[0].atmost}}额度</v-chip>
                           </v-flex>
                         </v-layout>
                       </v-container>
@@ -223,7 +224,7 @@
             <v-btn icon @click.native="show_dialog = false" dark>
               <v-icon color="amber lighten-3">close</v-icon>
             </v-btn>
-            <v-toolbar-title v-text="'购买'" style="color:#FFE082;fontSize:16px;"></v-toolbar-title>
+            <v-toolbar-title v-text="'合计' + current_items.length +  '款产品，左右滑动切换'" style="color:#FFE082;fontSize:16px;"></v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
@@ -240,6 +241,7 @@
                     <v-flex xs12 class="gold-text py-2">
                       <v-chip v-if="current_item.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
                       <v-chip v-if="current_item.atleast" small color="amber lighten-4" text-color="grey darken-4">{{current_item.atleast}}起投</v-chip>
+                      <v-chip v-if="current_item.atmost" small color="amber lighten-4" text-color="grey darken-4">{{current_item.atmost}}额度</v-chip>
                     </v-flex>
                     <!--  <v-flex xs9>
             <v-slider :disabled="is_loading" dark label="数量" :min="current_item.atleast" :max="max_amount" v-model="amount" :track-color="'grey lighten-2'" :thumb-color="'amber lighten-4'" :color="'amber lighten-4'"></v-slider>
@@ -330,7 +332,7 @@
             </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn dark color="amber lighten-4" :disabled="is_trading" @click.native="real_take_in" class="mb-3 grey-text" large block>确认充值</v-btn>
+            <v-btn dark color="amber lighten-4" :disabled="is_trading" @click.native="real_take_in" class="mb-3 grey-text" large block>确认充币</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -346,16 +348,31 @@
             <v-container grid-list-md>
               <v-layout wrap>
                 <v-flex xs12>
+                  <v-select dark color="amber lighten-4" item-text="Name" :items="take_out_items" v-model="take_out_item" label="选择币种" single-line></v-select>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'提币地址'" v-model="take_out_addr" class="input-content-tradeid" key="take_out_addr"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入提币数量'" v-model="take_out_id" class="input-content-tradeid" key="take_out_id"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_out_count" class="input-content-tradeid" key="take_out_count"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="take_out_pwd" class="input-content-tradepwd" key="take_out_pwd"></v-text-field>
+                </v-flex>
+                <!--   <v-flex xs12>
                   <v-select dark color="amber lighten-4" :items="take_out_items" v-model="take_out_item" label="选择币种" single-line></v-select>
                 </v-flex>
                 <v-flex xs12>
                   <v-text-field disabled dark color="amber lighten-4" v-model="take_out_addr" textarea class="input-content-tradeid" key="take_out_addr"></v-text-field>
-                </v-flex>
+                </v-flex> -->
               </v-layout>
             </v-container>
           </v-card-text>
           <v-card-actions>
-            <v-btn color="amber lighten-4" @click.native="real_take_out" class="mb-3 grey-text" large block>长按地址复制</v-btn>
+            <v-btn color="amber lighten-4" @click.native="real_take_out" class="mb-3 grey-text" large block>确认提币</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -403,13 +420,19 @@ export default {
       take_in_pwd: '',
       take_in_items: [],
       take_in_item: null,
+      take_out_count: '',
+      take_out_id: '',
+      take_out_addr: '',
+      take_out_pwd: '',
+      take_out_items: [],
+      take_out_item: null,
       take_out_addr: '',
       take_out_addr_USDT: '12dzV3VvowPWNMpt5WJ6sgZMuwq6EAMiF3',
       take_out_addr_EOS: '等待主网上线，暂停充值',
       take_out_addr_BTC: '12dzV3VvowPWNMpt5WJ6sgZMuwq6EAMiF3',
       take_out_addr_ETH: '0x1e59f24a00166e7c944cb185a850649b8a20de0d',
-      take_out_items: ['USDT', 'EOS', 'BTC', 'ETH'],
-      take_out_item: 'USDT',
+      // take_out_items: ['USDT', 'EOS', 'BTC', 'ETH'],
+      // take_out_item: 'USDT',
 
     }
   },
@@ -482,6 +505,7 @@ export default {
               benefit_add_type: item.OffsetPlus == 1 ? '+' : (item.OffsetPlus == 2 ? '-' : '±'),
               time: item.Expires,
               atleast: item.BaseLine,
+              atmost: item.Limit,
               expmoney: 'no',
               id: item.ID,
             })
@@ -504,7 +528,7 @@ export default {
   },
   methods: {
     ...mapActions('business', [
-      'getWallet', 'getMyEntrust', 'getAvailableEntrustList', 'getEntrustDetail', 'buyEntrust', 'convertPrice', 'queryRecharge', 'recharge'
+      'getWallet', 'getMyEntrust', 'getAvailableEntrustList', 'getEntrustDetail', 'buyEntrust', 'convertPrice', 'queryRecharge', 'recharge', 'enchashment'
     ]),
     select_entrust(i) {
       if (this.select_entrust_index == i) {
@@ -540,9 +564,9 @@ export default {
       this.show_dialog = true;
       this.select_entrust_index = -1;
       this.select_entrust(0);
-      if (this.current_items.length > 1) {
-        this.$toast('一共' + this.current_items.length + '款产品，请左右滑动切换')
-      }
+      // if (this.current_items.length > 1) {
+      //   this.$toast('一共' + this.current_items.length + '款产品，请左右滑动切换')
+      // }
     },
     ready_buy() {
       if (!this.trade_amount) {
@@ -618,6 +642,7 @@ export default {
                 benefit_add_type: item.OffsetPlus == 1 ? '+' : (item.OffsetPlus == 2 ? '-' : '±'),
                 time: item.Expires,
                 atleast: item.BaseLine,
+                atmost: item.Limit,
                 expmoney: 'no',
                 id: item.ID,
                 hold: item.HoldCount,
@@ -660,11 +685,25 @@ export default {
           this.$toast(response.data.Result.FaultMsg)
         }
       }).catch(error => {
-        this.$toast('查询充值类型失败');
+        this.$toast('查询充币类型失败');
       })
     },
     take_out() {
-      this.take_out_dialog = true;
+      this.take_out_id = '';
+      this.take_out_count = '';
+      this.take_out_addr = '';
+      this.take_out_pwd = '';
+      this.take_out_item = '';
+      this.queryRecharge().then(response => {
+        if (response.data.Result.Status == 0) {
+          this.take_out_items = response.data.Items;
+          this.take_out_dialog = true;
+        } else {
+          this.$toast(response.data.Result.FaultMsg)
+        }
+      }).catch(error => {
+        this.$toast('查询提币类型失败');
+      })
     },
     real_take_in() {
       if (!this.take_in_id || !this.take_in_pwd || !this.take_in_count || !this.take_in_item.CoinID) {
@@ -680,7 +719,7 @@ export default {
       }).then(response => {
         if (response.data.Result.Status == 0) {
           this.take_in_dialog = false;
-          this.$toast('充值成功');
+          this.$toast(response.data.Info);
         } else {
           this.$toast(response.data.Result.FaultMsg)
         }
@@ -689,11 +728,30 @@ export default {
         this.$toast('查询失败');
         this.is_trading = false;
       })
-
     },
     real_take_out() {
-      this.take_out_dialog = false;
-      this.toast('复制成功')
+      if (!this.take_out_id || !this.take_out_pwd || !this.take_out_count || !this.take_out_item.CoinID) {
+        this.$toast('请输入必填信息');
+        return;
+      }
+      this.is_trading = true;
+      this.enchashment({
+        'CoinID': this.take_out_item.CoinID,
+        'DealID': this.take_out_id,
+        'Pwd': this.take_out_pwd,
+        'BackNum': this.take_out_count,
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.take_out_dialog = false;
+          this.$toast(response.data.Info);
+        } else {
+          this.$toast(response.data.Result.FaultMsg)
+        }
+        this.is_trading = false;
+      }).catch(error => {
+        this.$toast('查询失败');
+        this.is_trading = false;
+      })
     },
   }
 }
@@ -741,37 +799,13 @@ export default {
   margin: 0 30px 10px;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*.application .theme--light.card,
+.application .theme--light.card,
 .theme--light .card {
-  background-color: transparent;
-}*/
+  background-color: rgba(11, 11, 11, .167);
+}
 
 .application .theme--dark.btn,
 .theme--dark .btn {
   color: #212121;
 }
-
 </style>

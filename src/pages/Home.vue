@@ -346,13 +346,15 @@ export default {
   /*color: #01579B;*/
 }
 
-.application .theme--light.list,
-.theme--light .list {
-  background-color: transparent;
-}
+
 
 ::-webkit-scrollbar {
   display: none;
+}
+
+.application .theme--light.list,
+.theme--light .list {
+  background-color: transparent;
 }
 
 .application .theme--light.card,

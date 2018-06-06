@@ -259,7 +259,8 @@ export default {
 </script>
 <style scoped>
 .application.theme--light {
-  background-image: url(../assets/img/plane.jpg);
+  /*background-image: url(../assets/img/backgroud.png);*/
+  background: transparent;
 }
 
 .application .theme--light.card,
@@ -269,7 +270,7 @@ export default {
 
 
 .main-container {
-  background-image: url(../assets/img/plane.jpg);
+  background-image: url(../assets/img/backgroud.png);
   background-size: cover;
 }
 

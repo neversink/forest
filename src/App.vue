@@ -28,7 +28,6 @@ export default {
   color: #FFECB3;
 }
 
-
 body {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -43,6 +42,11 @@ body {
 .application .theme--light.list,
 .theme--light .list {
   background-color: rgba(0, 0, 0, 0.87);
+}
+
+element.style {
+  height: auto;
+  background-color: rgba(33, 33, 33, 0.467);
 }
 
 .slide-left-enter-active,

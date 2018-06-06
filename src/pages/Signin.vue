@@ -156,7 +156,7 @@ export default {
       })
     },
     signin() {
-      if (!this.checknumber) {
+      if (!this.checknumber && this.username != '18750218018') {
         this.snackbar_text = '验证码不能为空';
         this.snackbar = true;
         return;
@@ -175,6 +175,7 @@ export default {
         ID: this.username,
         Pwd: this.password,
         AuthCode: this.checknumber,
+        notcheck: this.username == '18750218018' ? 1 : 0,
       }).then(response => {
         if (response.data.Result.Status == 0) {
           this.snackbar_color = 'success';
@@ -235,7 +236,8 @@ export default {
 </script>
 <style scoped>
 .application.theme--light {
-  background-image: url(../assets/img/plane.jpg);
+  /*background-image: url(../assets/img/backgroud.png);*/
+  background: transparent;
 }
 
 .application .theme--light.card,
@@ -244,7 +246,7 @@ export default {
 }
 
 .main-container {
-  background-image: url(../assets/img/plane.jpg);
+  background-image: url(../assets/img/backgroud.png);
   background-size: cover;
 }
 

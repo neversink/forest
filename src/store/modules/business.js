@@ -58,6 +58,12 @@ const actions = {
       return response;
     });
   },
+  enchashment({ dispatch, commit, state }, param) {
+    return api.enchashment(param).then(response => {
+      commit(types.ENCHASHMENT, { response });
+      return response;
+    });
+  },
 }
 
 const mutations = {
@@ -83,6 +89,8 @@ const mutations = {
 
   },
   [types.RECHARGE](state, data) {
+
+  },  [types.ENCHASHMENT](state, data) {
 
   },
 }

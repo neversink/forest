@@ -129,11 +129,11 @@
                     <v-btn @click.native="change_login_pwd" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>修改</v-btn>
                   </v-flex>
                 </template>
-                <template v-if="confirm_type == '资金密码'">
+                <template v-if="confirm_type == '交易密码'">
                   <v-flex xs11>
-                    <v-text-field v-if="confirm_action = '修改'" :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原资金密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
-                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入新资金密码'" v-model="asset_pwd" key="asset_pwd"></v-text-field>
-                    <v-text-field :disabled="is_loading" :rules="[rules.confirmpassword,]" dark clearable color="amber lighten-4" name="" :label="'请再次输入新资金密码'" v-model="asset_pwd2" class="input-content-idcard" key="asset_pwd2"></v-text-field>
+                    <v-text-field v-if="confirm_action == '修改'" :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入原交易密码'" v-model="asset_pwd_old" class="input-content-username" key="asset_pwd_old"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.password,]" dark clearable color="amber lighten-4" name="" :label="'请输入新交易密码'" v-model="asset_pwd" key="asset_pwd"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.confirmpassword,]" dark clearable color="amber lighten-4" name="" :label="'请再次输入新交易密码'" v-model="asset_pwd2" class="input-content-idcard" key="asset_pwd2"></v-text-field>
                   </v-flex>
                   <v-flex xs11>
                     <v-btn @click.native="change_asset_pwd" :loading="is_loading" :disabled="is_loading" block class="login-button" color="amber lighten-4" large>修改</v-btn>
@@ -390,7 +390,7 @@ export default {
           this.login_pwd2 = '';
           this.show_dialog = true;
           break;
-        case '资金密码':
+        case '交易密码':
           this.asset_pwd = '';
           this.asset_pwd2 = '';
           this.show_dialog = true;

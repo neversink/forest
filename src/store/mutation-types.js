@@ -18,6 +18,7 @@
   export const CONVERT_PRICE = 'CONVERT_PRICE';
   export const QUERY_RECHARGE = 'QUERY_RECHARGE';
   export const RECHARGE = 'RECHARGE';
+  export const ENCHASHMENT = 'ENCHASHMENT';
   // 交易
   export const REVEIVE_MARKET_INFO = 'REVEIVE_MARKET_INFO';
   // 媒体

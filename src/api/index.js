@@ -129,6 +129,9 @@ export default {
   recharge(param) {
     return instance.post('AddFunds', qs.stringify(param))
   },
+  enchashment(param) {
+    return instance.post('BackFunds', qs.stringify(param))
+  },
   // 交易
   getStockInfo() {
     return instance.get('', {
