@@ -320,10 +320,10 @@
                   <v-text-field :disabled="true" v-if="take_in_item" dark color="amber lighten-4" name="" :label="'充币地址'" v-model="take_in_addr" class="input-content-tradeid" key="take_in_addr"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入充币数量'" v-model="take_in_id" class="input-content-tradeid" key="take_in_id"></v-text-field>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入充币数量'" v-model="take_in_count" class="input-content-tradeid" key="take_in_count"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_in_count" class="input-content-tradeid" key="take_in_count"></v-text-field>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_in_id" class="input-content-tradeid" key="take_in_id"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="take_in_pwd" class="input-content-tradepwd" key="take_in_pwd"></v-text-field>
@@ -354,10 +354,10 @@
                   <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'提币地址'" v-model="take_out_addr" class="input-content-tradeid" key="take_out_addr"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入提币数量'" v-model="take_out_id" class="input-content-tradeid" key="take_out_id"></v-text-field>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入提币数量'" v-model="take_out_count" class="input-content-tradeid" key="take_out_count"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_out_count" class="input-content-tradeid" key="take_out_count"></v-text-field>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_out_id" class="input-content-tradeid" key="take_out_id"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="take_out_pwd" class="input-content-tradepwd" key="take_out_pwd"></v-text-field>
