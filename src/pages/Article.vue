@@ -14,7 +14,10 @@
       </v-btn>
     </v-toolbar>
     <v-content>
-      <section>
+      <img v-if="page == 3" src="../assets/img/banner_content1.gif" width="100%">
+      <img v-if="page == 1" src="../assets/img/banner_content2.jpg" width="100%">
+      <img v-if="page == 2" src="../assets/img/banner_content3.png" width="100%">
+      <!--  <section>
         <v-parallax src="./static/img/plane.jpg" height="200">
           <v-layout column align-center justify-center class="white--text">
             <h1 class="white--text mb-2  text-xs-center">{{article.title}}</h1>
@@ -43,7 +46,7 @@
             <div>森林APP &copy; {{ new Date().getFullYear() }}</div>
           </v-flex>
         </v-layout>
-      </v-footer>
+      </v-footer>-->
     </v-content>
   </v-app>
 </template>
@@ -53,6 +56,7 @@ export default {
   data() {
     return {
       is_like: false,
+      page: this.$route.params.page,
       article: {
         title: '加密货币继续普涨：比特币涨逾6% EOS暴涨逾三成',
         editor: '凤凰国际iMarkets',

@@ -41,7 +41,7 @@
       </div>
       <v-layout justify-center>
         <v-flex class="quit-button" xs10>
-          <v-btn block color="amber lighten-4" large replace @click.native="logout">退出登录</v-btn>
+          <v-btn block color="amber lighten-4" large replace @click.native="logout_click">退出登录</v-btn>
         </v-flex>
       </v-layout>
       <v-dialog v-model="show_dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
@@ -85,7 +85,7 @@
                 </template>
                 <template v-if="confirm_type == '邮箱'">
                   <v-flex xs11>
-                    <v-text-field :disabled="is_loading" :rules="[rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="name" class="input-content-username" key="email"></v-text-field>
+                    <v-text-field :disabled="is_loading" :rules="[rules.email,]" dark clearable color="amber lighten-4" name="" :label="'请输入邮箱地址'" v-model="email" class="input-content-username" key="email"></v-text-field>
                     <v-layout row wrap>
                       <v-flex xs7>
                         <v-text-field :rules="[rules.required,rules.checknumber,]" single-line dark color="amber lighten-4" name="" v-model="checknumber" label="请输入验证码" class="input-content-checknum"></v-text-field>
@@ -253,104 +253,110 @@ export default {
 
   },
   mounted() {
-    this.items = {
-      sfrz_items: {
-        title: '身份认证',
-        subtitle: '请如实填写您的身份信息，一经认证不可修改',
-        content: [{
-            icon: 'mdi-account',
-            title: '实名认证',
-            subtitle: this.IsAuth == 0 ? '您还未进行实名认证' : '已认证',
-            action: this.IsAuth == 0 ? '认证' : '',
-            enable: this.IsAuth === 0 || !this.IsAuth ? true : false,
-          },
-          {
-            icon: 'mdi-account-card-details',
-            title: '高级认证',
-            subtitle: this.IsAdvAuth == 0 ? '您还未进行高级认证' : '已认证',
-            action: this.IsAdvAuth == 0 ? '认证' : '',
-            enable: this.IsAdvAuth === 0 || !this.IsAdvAuth ? true : false,
-          },
-        ]
-      },
-      zhaq_items: {
-        title: '账户安全',
-        subtitle: '安全等级：' + (this.SecrLevel == 1 ? '低' : this.SecrLevel == 2 ? '中' : '高'),
-        content: [{
-            icon: 'mdi-email',
-            title: '邮箱',
-            subtitle: this.IsEmalBind == 0 ? '未绑定' : '已绑定',
-            action: this.IsEmalBind == 0 ? '绑定' : '',
-            enable: this.IsEmalBind == 0 || !this.IsEmalBind ? true : false,
-          },
-          {
-            icon: 'mdi-cellphone',
-            title: '手机',
-            subtitle: this.IsPhoneBind == 0 ? '未绑定' : '已绑定',
-            action: this.IsPhoneBind == 0 ? '绑定' : '',
-            enable: this.IsPhoneBind == 0 || !this.IsPhoneBind ? true : false,
-          },
-          {
-            icon: 'mdi-google',
-            title: '谷歌验证码',
-            subtitle: this.IsGoogleAuth == 0 ? '未绑定' : '已绑定',
-            action: this.IsGoogleAuth == 0 ? '绑定' : '',
-            enable: this.IsGoogleAuth == 0 || !this.IsGoogleAuth ? true : false,
-          },
-          {
-            icon: 'lock',
-            title: '登录密码',
-            subtitle: '已设置',
-            action: '修改',
-            enable: true
-          }, {
-            icon: 'mdi-cash-usd',
-            title: '交易密码',
-            subtitle: this.IsAccPwdEmpty == 0 ? '未设置' : '已设置',
-            action: this.IsAccPwdEmpty == 0 ? '新增' : '修改',
-            enable: true
-          }
-        ],
-      },
-      qtne_items: {
-        title: '其他内容',
-        subtitle: '',
-        content: [
-          // {
-          //     icon: 'face',
-          //     title: '在线客服',
-          //     subtitle: 'forest@forest.com',
-          //     action: '在线咨询',
-          //     enable: true
-          //   },
-          {
-            icon: 'mdi-at',
-            title: '邮件咨询',
-            subtitle: 'forest@forest.com',
-            action: '发送邮件',
-            enable: true
-          },
-          // {
-          //   icon: 'mdi-phone-in-talk',
-          //   title: '电话咨询',
-          //   subtitle: '123456',
-          //   action: '拨打电话',
-          //   enable: true
-          // },
-          // {
-          //   icon: 'mdi-cached',
-          //   title: '清除缓存',
-          //   subtitle: '当前已用缓存10M',
-          //   action: '清除',
-          // },
-        ],
-      },
-    }
+    this.items = this.create_menu_items();
   },
   methods: {
     ...mapActions('profile', [
       'bindTelOrEmail', 'changePassword', 'certify', 'advancedCertify', 'logout'
     ]),
+    ...mapActions('signin', [
+      'update_asset_pwd'
+    ]),
+    create_menu_items() {
+      return {
+        sfrz_items: {
+          title: '身份认证',
+          subtitle: '请如实填写您的身份信息，一经认证不可修改',
+          content: [{
+              icon: 'mdi-account',
+              title: '实名认证',
+              subtitle: this.IsAuth == 0 ? '您还未进行实名认证' : '已认证',
+              action: this.IsAuth == 0 ? '认证' : '',
+              enable: this.IsAuth === 0 || !this.IsAuth ? true : false,
+            },
+            {
+              icon: 'mdi-account-card-details',
+              title: '高级认证',
+              subtitle: this.IsAdvAuth == 0 ? '您还未进行高级认证' : '已认证',
+              action: this.IsAdvAuth == 0 ? '认证' : '',
+              enable: this.IsAdvAuth === 0 || !this.IsAdvAuth ? true : false,
+            },
+          ]
+        },
+        zhaq_items: {
+          title: '账户安全',
+          subtitle: '安全等级：' + (this.SecrLevel == 1 ? '低' : this.SecrLevel == 2 ? '中' : '高'),
+          content: [{
+              icon: 'mdi-email',
+              title: '邮箱',
+              subtitle: this.IsEmalBind == 0 ? '未绑定' : '已绑定',
+              action: this.IsEmalBind == 0 ? '绑定' : '',
+              enable: this.IsEmalBind == 0 || !this.IsEmalBind ? true : false,
+            },
+            {
+              icon: 'mdi-cellphone',
+              title: '手机',
+              subtitle: this.IsPhoneBind == 0 ? '未绑定' : '已绑定',
+              action: this.IsPhoneBind == 0 ? '绑定' : '',
+              enable: this.IsPhoneBind == 0 || !this.IsPhoneBind ? true : false,
+            },
+            {
+              icon: 'mdi-google',
+              title: '谷歌验证码',
+              subtitle: this.IsGoogleAuth == 0 ? '未绑定' : '已绑定',
+              action: this.IsGoogleAuth == 0 ? '绑定' : '',
+              enable: this.IsGoogleAuth == 0 || !this.IsGoogleAuth ? true : false,
+            },
+            {
+              icon: 'lock',
+              title: '登录密码',
+              subtitle: '已设置',
+              action: '修改',
+              enable: true
+            }, {
+              icon: 'mdi-cash-usd',
+              title: '交易密码',
+              subtitle: this.IsAccPwdEmpty == 0 ? '未设置' : '已设置',
+              action: this.IsAccPwdEmpty == 0 ? '新增' : '修改',
+              enable: true
+            }
+          ],
+        },
+        qtne_items: {
+          title: '其他内容',
+          subtitle: '',
+          content: [
+            // {
+            //     icon: 'face',
+            //     title: '在线客服',
+            //     subtitle: 'forest@forest.com',
+            //     action: '在线咨询',
+            //     enable: true
+            //   },
+            {
+              icon: 'mdi-at',
+              title: '邮件咨询',
+              subtitle: 'eaforest@hotmail.com',
+              action: '发送邮件',
+              enable: true
+            },
+            // {
+            //   icon: 'mdi-phone-in-talk',
+            //   title: '电话咨询',
+            //   subtitle: '123456',
+            //   action: '拨打电话',
+            //   enable: true
+            // },
+            // {
+            //   icon: 'mdi-cached',
+            //   title: '清除缓存',
+            //   subtitle: '当前已用缓存10M',
+            //   action: '清除',
+            // },
+          ],
+        },
+      }
+    },
     show_snackbar(content, type) {
       this.snackbar_color = type;
       this.snackbar_text = content;
@@ -402,6 +408,9 @@ export default {
         case '电话咨询':
           window.location.href = "tel:123456"
           break;
+        case '谷歌验证码':
+          this.$toast('功能开发中');
+          break;
       }
     },
     bind_tel() {
@@ -439,6 +448,18 @@ export default {
       })
     },
     change_login_pwd() {
+      if (this.login_pwd != this.login_pwd2) {
+        this.$toast('两次密码输入不一致');
+        return;
+      }
+      if (!this.login_pwd) {
+        this.$toast('密码不能为空');
+        return;
+      }
+      if (this.login_pwd.length < 8) {
+        this.$toast('密码长度至少为8位');
+        return;
+      }
       this.is_loading = true;
       this.changePassword({
         Type: '1',
@@ -461,6 +482,18 @@ export default {
       })
     },
     change_asset_pwd() {
+      if (this.asset_pwd != this.asset_pwd2) {
+        this.$toast('两次密码输入不一致');
+        return;
+      }
+      if (!this.asset_pwd) {
+        this.$toast('密码不能为空');
+        return;
+      }
+      if (this.asset_pwd.length < 8) {
+        this.$toast('密码长度至少为8位');
+        return;
+      }
       this.is_loading = true;
       this.changePassword({
         Type: '2',
@@ -469,12 +502,14 @@ export default {
         To: this.asset_pwd,
       }).then(response => {
         if (response.data.Result.Status == 0) {
-          this.show_snackbar('修改登录密码成功', 'success')
+          this.show_snackbar('修改交易密码成功', 'success')
+          this.update_asset_pwd(1);
+          this.items = this.create_menu_items();
         } else {
           this.show_snackbar(response.data.Result.FaultMsg, 'error')
         }
       }).catch(e => {
-        this.show_snackbar('修改登录密码失败', 'error')
+        this.show_snackbar('修改交易密码失败', 'error')
 
       })
     },
@@ -541,7 +576,7 @@ export default {
         this.snackbar = true;
       })
     },
-    logout() {
+    logout_click() {
       this.logout().then(() => {
         this.$router.push({
           name: 'Signin'

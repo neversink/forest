@@ -27,12 +27,18 @@ const actions = {
       return response;
     });
   },
+  update_asset_pwd({ dispatch, commit, state }, param) {
+    commit('update_asset_pwd', param)
+  }
 }
 
 const mutations = {
   [types.LOGIN](state, data) {
     state.userinfo = data.response.data;
   },
+  update_asset_pwd(state, data) {
+    state.userinfo.IsAccPwdEmpty = data;
+  }
 }
 
 export default {

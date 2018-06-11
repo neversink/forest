@@ -2,13 +2,13 @@
   <div class="main-container">
     <van-swipe :autoplay="3000" class="swipe" @change="on_swipe_change">
       <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/banner1.png" />
+        <img @click="goto_href(1)" class="swipe-item" src="../assets/img/banner1.png" />
       </van-swipe-item>
       <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/banner2.png" />
+        <img @click="goto_href(2)" class="swipe-item" src="../assets/img/banner2.png" />
       </van-swipe-item>
       <van-swipe-item>
-        <img @click="goto_href()" class="swipe-item" src="../assets/img/banner3.png" />
+        <img @click="goto_href(3)" class="swipe-item" src="../assets/img/banner3.png" />
       </van-swipe-item>
     </van-swipe>
     <div class="index-num-content">
@@ -92,7 +92,7 @@ export default {
   data() {
     return {
       activated_tab: 'tab-0',
-      notice_text: '32MB区块即将到来，BCH定于5月15日进行硬分叉，BCH网络将实现历史上最大的区块大小增长。',
+      notice_text: 'EA森林提供安全可靠的一站式数字货币交易服务，更多委托、量化产品即将上线，敬请期待',
       interval_id: '',
       pagination: {
         sortBy: 'percent',
@@ -251,15 +251,12 @@ export default {
       console.log('this')
     },
     goto_href(href) {
-      if (!href) {
-        this.$router.push({
-          name: 'Article'
-        })
-      } else {
-        this.$router.push({
-          name: href
-        })
-      }
+      this.$router.push({
+        name: 'Article',
+        params: {
+          page: href
+        }
+      })
     },
     on_swipe_change(i) {
       console.log(i)

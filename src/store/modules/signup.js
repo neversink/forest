@@ -16,8 +16,7 @@ const actions = {
     return api.register(param).then(response => {
       commit(types.REGISTER, { response });
       if (response.data.Result.Status == 0) {
-        console.log('sigin/' + types.LOGIN)
-        commit('signin/' + types.LOGIN, response, { root: true })
+        commit('signin/' + types.LOGIN, { response: response }, { root: true })
       }
       return response;
     });

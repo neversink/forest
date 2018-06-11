@@ -22,7 +22,7 @@
                   <v-container text-xs-center class="pb-0 mb-0">
                     <v-layout justify-center row wrap>
                       <v-flex xs12 class="caption grey-text">总收益</v-flex>
-                      <v-flex xs12 class="headline gold-text">{{total_earn}}</v-flex>
+                      <v-flex xs12 class="headline gold-text">{{total_earn}}<small>个币</small></v-flex>
                       <v-flex xs4 class="my-2 ml-2">
                         <v-btn color="amber lighten-4" @click.native="take_in">
                           充币
@@ -50,7 +50,7 @@
             </v-layout>
             <v-container v-show="wallet_type == 0" fluid style="min-height: 0;" grid-list-lg>
               <v-layout row wrap>
-                <v-flex xs12 v-for="(i ,index) in assets" :key="index">
+                <v-flex xs12 v-for="(i ,index) in assets" :key="index" v-if="index != 0">
                   <v-card style="background-color:#212121AA">
                     <v-container text-xs-center>
                       <v-layout justify-center row wrap>
@@ -88,6 +88,11 @@
                       <v-btn block flat dark @click.native="get_my_entrusts"><span class="gold-text">{{hold_entrust_list ? '收起 >' : '查看详细'}} ></span></v-btn>
                       <v-spacer></v-spacer>
                     </v-card-actions>
+                    <v-card-actions class="grey darken-4 pt-0" v-else-if="i.type == '量化'">
+                      <v-spacer></v-spacer>
+                      <v-btn block flat dark @click.native="activated_tab = '2'"><span class="gold-text">查看详细</span></v-btn>
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
                     <v-card-actions class="grey darken-4 pt-0" v-else>
                       <v-spacer></v-spacer>
                       <v-btn block flat dark @click.native="get_my_others"><span class="gold-text">查看详细</span></v-btn>
@@ -105,11 +110,14 @@
                       <span class="gold-text">{{i.type}}</span>
                     </v-list-tile-avatar>
                     <v-list-tile-content>
-                      <v-list-tile-title><span :class="[i.action =='sell'?'sell-text':'buy-text', 'body-1']">{{ i.detail }}</span></v-list-tile-title>
-                      <v-list-tile-sub-title><span :class="[i.action =='sell'?'sell-text':'buy-text', 'caption']">{{i.time}}</span></v-list-tile-sub-title>
+                      <v-spacer></v-spacer>
+                      <!-- <v-list-tile-title><span :class="[i.action =='sell'?'sell-text':'buy-text', 'body-1']">{{ i.detail }}</span></v-list-tile-title>
+                      <v-list-tile-sub-title><span :class="[i.action =='sell'?'sell-text':'buy-text', 'caption']">{{i.time}}</span></v-list-tile-sub-title> -->
+                      <v-list-tile-title><span class="buy-text caption">量化{{ i.quan }}</span></v-list-tile-title>
+                      <v-list-tile-sub-title><span class="buy-text caption">委托{{ i.entrust }}</span></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
-                      <span class="display-1 gold-text">{{i.amount}}</span>
+                      <span class="caption gold-text">总数{{i.detail}}</span>
                     </v-list-tile-action>
                   </v-list-tile>
                   <v-divider dark inset v-if="index + 1< commits.length" :key="index"></v-divider>
@@ -152,71 +160,59 @@
             </v-container>
           </v-card>
         </v-tab-item>
-        <!--  <v-tab-item>
-          <v-card color="grey darken-3" v-for="(i ,index) in entrusts">
-            <v-container fluid grid-list-lg class="py-0 my-0">
-              <v-layout row wrap>
-                <v-flex xs12>
-                  <v-card color="grey darken-4">
-                    <v-card-title primary-title>
-                      <v-container text-xs-center class="py-0 my-0">
-                        <v-layout justify-center row wrap>
-                          <v-flex xs12 class="title gold-text">{{i.type}} </v-flex>
-                          <v-flex xs6 class="caption grey-text py-0">预期年化率</v-flex>
-                          <v-flex xs6 class="caption grey-text py-0">剩余抢购时间</v-flex>
-                          <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex>
-                          <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.time}}</span>天</v-flex>
-                          <v-flex xs12 class="gold-text py-0">
-                            <v-chip v-if="i.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
-                            <v-chip v-if="i.atleast" small color="amber lighten-4" text-color="grey darken-4">{{i.atleast}}起投</v-chip>
-                          </v-flex>
-                        </v-layout>
-                      </v-container>
-                    </v-card-title>
-                    <v-card-actions class="">
+        <v-tab-item>
+          <v-card color="transparent">
+            <v-layout row wrap>
+              <v-flex xs12>
+                <v-card style="background-color:#21212177">
+                  <v-container text-xs-center class="pb-0 mb-0">
+                    <v-layout justify-center row wrap>
+                      <v-flex xs12 class="caption grey-text">总收益</v-flex>
+                      <v-flex xs12 class="headline gold-text">{{total_earn}}<small>个币</small></v-flex>
+                      <!--   <v-flex xs6 class="caption grey-text py-0">昨日收益(USDT)</v-flex>
+                      <v-flex xs6 class="caption grey-text py-0">总收益(USDT)</v-flex>
+                      <v-flex xs6 class="gold-text py-0"><span class="display-1">{{1}}</span>%</v-flex>
+                      <v-flex xs6 class="gold-text py-0"><span class="display-1">{{2}}</span>天</v-flex> -->
+                      <v-flex xs4 class="my-2 ml-2">
+                        <v-btn color="brown lighten-1" @click.native="buy_quan('转入')">
+                          <span class="white-text">转入</span>
+                        </v-btn>
+                      </v-flex>
+                      <v-flex xs4 class="my-2 mr-2">
+                        <v-btn dark color="red darken-3" @click.native="buy_quan('转出')">
+                          <span class="white-text">转出</span>
+                        </v-btn>
+                      </v-flex>
+                      <v-flex xs12 class="headline gold-text">
+                        <v-btn color="blue darken-3" block @click.native="start_quan"><span class="white-text">{{start_query_btn}}</span></v-btn>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
+                </v-card>
+              </v-flex>
+            </v-layout>
+            <v-card>
+              <v-list class="list-background">
+                <template v-for="(i ,index) in quan_list">
+                  <v-list-tile :key="i.title" avatar @click="">
+                    <v-list-tile-avatar>
+                      <span class="gold-text">{{i.CoinName}}</span>
+                    </v-list-tile-avatar>
+                    <v-list-tile-content>
                       <v-spacer></v-spacer>
-                      <v-btn block flat dark @click.native="wanna_buy(i)"><span class="gold-text">立即购买</span></v-btn>
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
+                      <v-list-tile-title><span class="grey-text caption">收益{{ i.OccurNum.toFixed(10) }}</span></v-list-tile-title>
+                      <v-list-tile-sub-title><span class="grey-text caption">{{ i.OccurDate }}</span></v-list-tile-sub-title>
+                    </v-list-tile-content>
+                    <v-list-tile-action>
+                      <span class="caption gold-text">总数{{i.CurrNum}}</span>
+                    </v-list-tile-action>
+                  </v-list-tile>
+                  <v-divider dark inset v-if="index + 1< commits.length" :key="index"></v-divider>
+                </template>
+              </v-list>
+            </v-card>
           </v-card>
         </v-tab-item>
-
-        <v-tab-item>
-          <v-card color="grey darken-3" v-for="(i ,index) in entrusts">
-            <v-container fluid grid-list-lg class="py-0 my-0">
-              <v-layout row wrap>
-                <v-flex xs12>
-                  <v-card color="grey darken-4">
-                    <v-card-title primary-title>
-                      <v-container text-xs-center class="py-0 my-0">
-                        <v-layout justify-center row wrap>
-                          <v-flex xs12 class="title gold-text">{{i.type}} </v-flex>
-                          <v-flex xs6 class="caption grey-text py-0">预期年化率</v-flex>
-                          <v-flex xs6 class="caption grey-text py-0">剩余抢购时间</v-flex>
-                          <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex>
-                          <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>天</v-flex>
-                          <v-flex xs12 class="gold-text py-0">
-                            <v-chip v-if="i.expmoney == 'yes'" small color="amber lighten-4" text-color="grey darken-4">体验金可用</v-chip>
-                            <v-chip v-if="i.atleast" small color="amber lighten-4" text-color="grey darken-4">{{i.atleast}}起投</v-chip>
-                          </v-flex>
-                        </v-layout>
-                      </v-container>
-                    </v-card-title>
-                    <v-card-actions class="">
-                      <v-spacer></v-spacer>
-                      <v-btn block flat dark @click.native="wanna_buy(i)"><span class="gold-text">立即购买</span></v-btn>
-                      <v-spacer></v-spacer>
-                    </v-card-actions>
-                  </v-card>
-                </v-flex>
-              </v-layout>
-            </v-container>
-          </v-card>
-        </v-tab-item> -->
       </v-tabs-items>
       <v-dialog v-model="show_dialog" fullscreen hide-overlay transition="dialog-bottom-transition" scrollable>
         <v-card tile class="main-container">
@@ -228,7 +224,6 @@
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-card-text>
-            <!-- <button @click="swipe_swiper">click</button> -->
             <v-container fluid grid-list-md text-xs-center>
               <van-swipe :show-indicators="false" @change.self="select_entrust" ref="swipe">
                 <van-swipe-item v-for="current_item in current_items" :key="current_item.id">
@@ -243,22 +238,7 @@
                       <v-chip v-if="current_item.atleast" small color="amber lighten-4" text-color="grey darken-4">{{current_item.atleast}}起投</v-chip>
                       <v-chip v-if="current_item.atmost" small color="amber lighten-4" text-color="grey darken-4">{{current_item.atmost}}额度</v-chip>
                     </v-flex>
-                    <!--  <v-flex xs9>
-            <v-slider :disabled="is_loading" dark label="数量" :min="current_item.atleast" :max="max_amount" v-model="amount" :track-color="'grey lighten-2'" :thumb-color="'amber lighten-4'" :color="'amber lighten-4'"></v-slider>
-          </v-flex> -->
-                    <!-- <v-flex xs12 class="my-4">
-                      <v-stepper vertical dark>
-                        <v-stepper-step step="1" complete>
-                          授权投标
-                          <small>当日计息</small>
-                        </v-stepper-step>
-                        <v-stepper-content step="1"></v-stepper-content>
-                        <v-stepper-step step="2" complete>出借到期<small>2018.04.26</small></v-stepper-step>
-                        <v-stepper-content step="2"></v-stepper-content>
-                        <v-stepper-step step="3">退出成功<small>出借结束</small></v-stepper-step>
-                        <v-stepper-content step="3"></v-stepper-content>
-                      </v-stepper>
-                    </v-flex> -->
+                    </v-flex>
                     <v-flex xs10 class="mx-5">
                       <v-text-field color="amber lighten-4" :disabled="is_loading" :label="'剩余可投入' + current_item_detail.RestCoinNum + ' ' + current_item_detail.CoinName" dark v-model="trade_amount" type="number"></v-text-field>
                     </v-flex>
@@ -282,13 +262,13 @@
           </v-card-title>
           <v-card-text ml-2>您购买的 <big class="gold-text">{{current_item.type}}</big></v-card-text>
           <v-card-text ml-2><big class="gold-text">总价：</big>{{trade_amount}} {{current_item_detail.CoinName}}</v-card-text>
-          <v-card-text ml-2><big class="gold-text">折合：</big>{{trade_usdt_amount}} {{trade_usdt_name}}</v-card-text>
+          <!-- <v-card-text ml-2><big class="gold-text">折合：</big>{{trade_usdt_amount}} {{trade_usdt_name}}</v-card-text> -->
           <v-card-text>
             <v-container grid-list-md>
               <v-layout wrap>
-                <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="tradeid" class="input-content-tradeid" key="tradeid"></v-text-field>
-                </v-flex>
+                <!--   <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入区块链交易ID'" v-model="tradeid" class="input-content-tradeid" key="tradeid"></v-text-field>
+                </v-flex> -->
                 <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输支付密码" v-model="tradepwd" class="input-content-tradepwd" key="tradepwd"></v-text-field>
                 </v-flex>
@@ -304,26 +284,26 @@
       </v-dialog>
       <v-dialog v-model="take_in_dialog" max-width="600" persistent>
         <v-card dark>
-          <v-card-title>
+          <v-card-title class="py-0">
             <v-btn flat absolute @click.native="take_in_dialog = false">
               <v-icon color="amber lighten-3">close</v-icon>
             </v-btn>
             <span class="headline gold-text " style="margin: 0 auto">充币</span>
           </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
+          <v-card-text class="pb-0">
+            <v-container grid-list-xs>
               <v-layout wrap>
                 <v-flex xs12>
                   <v-select dark color="amber lighten-4" item-text="Name" :items="take_in_items" v-model="take_in_item" label="选择币种" single-line></v-select>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="true" v-if="take_in_item" dark color="amber lighten-4" name="" :label="'充币地址'" v-model="take_in_addr" class="input-content-tradeid" key="take_in_addr"></v-text-field>
+                  <v-text-field :append-icon="'mdi-content-paste'" :append-icon-cb="click_copy" readonly v-if="take_in_item" dark color="amber lighten-4" name="" :label="'充币地址'" v-model="take_in_addr" class="input-content-tradeid" key="take_in_addr"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入充币数量'" v-model="take_in_count" class="input-content-tradeid" key="take_in_count"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_in_id" class="input-content-tradeid" key="take_in_id"></v-text-field>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入区块链交易ID'" v-model="take_in_id" class="input-content-tradeid" key="take_in_id"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="take_in_pwd" class="input-content-tradepwd" key="take_in_pwd"></v-text-field>
@@ -338,41 +318,60 @@
       </v-dialog>
       <v-dialog v-model="take_out_dialog" max-width="600" persistent>
         <v-card dark>
-          <v-card-title>
+          <v-card-title class="pb-0">
             <v-btn flat absolute @click.native="take_out_dialog = false">
               <v-icon color="amber lighten-3">close</v-icon>
             </v-btn>
             <span class="headline gold-text " style="margin: 0 auto">提币</span>
           </v-card-title>
-          <v-card-text>
-            <v-container grid-list-md>
+          <v-card-text class="py-0">
+            <v-container grid-list-xs>
               <v-layout wrap>
                 <v-flex xs12>
                   <v-select dark color="amber lighten-4" item-text="Name" :items="take_out_items" v-model="take_out_item" label="选择币种" single-line></v-select>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'提币地址'" v-model="take_out_addr" class="input-content-tradeid" key="take_out_addr"></v-text-field>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入提币地址'" v-model="take_out_addr" class="input-content-tradeid" key="take_out_addr"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入提币数量'" v-model="take_out_count" class="input-content-tradeid" key="take_out_count"></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm6 md4>
-                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入交易ID'" v-model="take_out_id" class="input-content-tradeid" key="take_out_id"></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm6 md4>
                   <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="take_out_pwd" class="input-content-tradepwd" key="take_out_pwd"></v-text-field>
                 </v-flex>
-                <!--   <v-flex xs12>
-                  <v-select dark color="amber lighten-4" :items="take_out_items" v-model="take_out_item" label="选择币种" single-line></v-select>
-                </v-flex>
-                <v-flex xs12>
-                  <v-text-field disabled dark color="amber lighten-4" v-model="take_out_addr" textarea class="input-content-tradeid" key="take_out_addr"></v-text-field>
-                </v-flex> -->
               </v-layout>
             </v-container>
           </v-card-text>
           <v-card-actions>
             <v-btn color="amber lighten-4" @click.native="real_take_out" class="mb-3 grey-text" large block>确认提币</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="quan_dialog" max-width="600" persistent>
+        <v-card dark>
+          <v-card-title class="pb-0">
+            <v-btn flat absolute @click.native="quan_dialog = false">
+              <v-icon color="amber lighten-3">close</v-icon>
+            </v-btn>
+            <span class="headline gold-text " style="margin: 0 auto">量化{{ quan_action }}</span>
+          </v-card-title>
+          <v-card-text class="py-0">
+            <v-container grid-list-xs>
+              <v-layout wrap>
+                <v-flex xs12>
+                  <v-select dark color="amber lighten-4" item-text="Name" :items="quan_items" v-model="quan_item" label="选择币种" single-line></v-select>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark clearable color="amber lighten-4" name="" :label="'请输入' + quan_action + '数量'" v-model="quan_count" class="input-content-tradeid" key="quan_count"></v-text-field>
+                </v-flex>
+                <v-flex xs12 sm6 md4>
+                  <v-text-field :disabled="is_trading" dark color="amber lighten-4" name="" label="请输入支付密码" v-model="quan_pwd" class="input-content-tradepwd" key="quan_pwd"></v-text-field>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn color="amber lighten-4" @click.native="real_buy_quan" class="mb-3 grey-text" large block>确认{{ quan_action }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -406,7 +405,7 @@ export default {
       tradeid: '',
       tradepwd: '',
       // categarys: ['钱包', '委托', '量化', '杠杆'],
-      categarys: ['钱包', '委托', ],
+      categarys: ['钱包', '委托', '量化', ],
       wallet_type: 0,
       commits: [],
       assets: [],
@@ -422,7 +421,6 @@ export default {
       take_in_item: null,
       take_out_count: '',
       take_out_id: '',
-      take_out_addr: '',
       take_out_pwd: '',
       take_out_items: [],
       take_out_item: null,
@@ -433,11 +431,36 @@ export default {
       take_out_addr_ETH: '0x1e59f24a00166e7c944cb185a850649b8a20de0d',
       // take_out_items: ['USDT', 'EOS', 'BTC', 'ETH'],
       // take_out_item: 'USDT',
-
+      quan_dialog: false,
+      query_quan_interval_id: '',
+      quan_action: '',
+      quan_items: [],
+      quan_item: null,
+      quan_count: '',
+      quan_action: '',
+      quan_pwd: '',
+      quan_list: [],
     }
   },
   computed: {
-
+    ...mapGetters('business', [
+      'queryList'
+    ]),
+    ...mapGetters('signin', [
+      'IsAccPwdEmpty'
+    ]),
+    has_quan_started() {
+      return this.assets[2].conceive > 0
+    },
+    start_query_btn() {
+      let def = false;
+      this.commits.forEach(i => {
+        if (i.quaning == '1') {
+          def = true;
+        }
+      })
+      return def ? '结束' : '开始'
+    }
   },
   watch: {
     take_out_item: {
@@ -459,77 +482,95 @@ export default {
     },
     take_in_item(newVal, oldVal) {
       this.take_in_addr = newVal.Address
+    },
+    activated_tab(newVal, oldVal) {
+      if (newVal == 2) {
+        this.query_quan();
+      } else {
+        clearInterval(this.query_quan_interval_id);
+      }
     }
   },
   created() {
-    this.getWallet({
-      ID: 'test@sina.com'
-    }).then(response => {
-      if (response.data.Result.Status == 0) {
-        this.total_earn = response.data.AllEarn;
-        let temp_assets = [
-          { type: '余币宝', proportion: response.data.Asset[response.data.AssRestIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssRestIndex].Num) },
-          { type: '持有委托', proportion: response.data.Asset[response.data.AssHoldIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssHoldIndex].Num) },
-          { type: '量化', proportion: response.data.Asset[response.data.AssQuanIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssQuanIndex].Num) },
-          { type: '杠杆', proportion: response.data.Asset[response.data.AssLeverIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssLeverIndex].Num) }
-        ];
-        let temp_commits = response.data.Items.map(i => {
-          return {
-            type: i.Name,
-            time: i.LastBuyTime,
-            amount: i.LastBuyCount,
-            detail: i.Count,
-          }
-        })
-        this.assets = temp_assets;
-        this.commits = temp_commits;
-      } else {
-
-      }
-      this.if_loaded = true;
-    }).catch(error => {
-      this.if_loaded = true;
-    });
-    this.getAvailableEntrustList().then(response => {
-      if (response.data.Result.Status == 0) {
-        let temp_entrusts = [];
-        let temp_entrusts_group = {};
-        response.data.Types.forEach(group => {
-          let temp_entrusts_item = []
-          group.ItemsIndex.forEach(index => {
-            let item = response.data.EnstustItems[index]
-            temp_entrusts_item.push({
-              type: item.Name,
-              benefit: item.Earn,
-              benefit_add: item.OffsetEarn,
-              benefit_add_type: item.OffsetPlus == 1 ? '+' : (item.OffsetPlus == 2 ? '-' : '±'),
-              time: item.Expires,
-              atleast: item.BaseLine,
-              atmost: item.Limit,
-              expmoney: 'no',
-              id: item.ID,
-            })
-          })
-          let temp_entrusts_group = {
-            groupname: group.Name,
-            count: group.ItemsIndex.length,
-            items: temp_entrusts_item
-          }
-          temp_entrusts.push(temp_entrusts_group)
-        })
-        this.entrusts = temp_entrusts;
-      } else {
-
-      }
-    }).catch(error => {
-
-    });
-
+    this.init_entrust_data();
+    this.init_wallet_data();
+  },
+  destroyed() {
+    clearInterval(this.query_quan_interval_id)
   },
   methods: {
     ...mapActions('business', [
-      'getWallet', 'getMyEntrust', 'getAvailableEntrustList', 'getEntrustDetail', 'buyEntrust', 'convertPrice', 'queryRecharge', 'recharge', 'enchashment'
+      'getWallet', 'getMyEntrust', 'getAvailableEntrustList', 'getEntrustDetail', 'buyEntrust', 'convertPrice', 'queryRecharge', 'recharge', 'enchashment', 'startQuan', 'transQuan', 'queryQuan'
     ]),
+    init_entrust_data() {
+      this.getAvailableEntrustList().then(response => {
+        if (response.data.Result.Status == 0) {
+          let temp_entrusts = [];
+          let temp_entrusts_group = {};
+          response.data.Types.forEach(group => {
+            let temp_entrusts_item = []
+            group.ItemsIndex.forEach(index => {
+              let item = response.data.EnstustItems[index]
+              temp_entrusts_item.push({
+                type: item.Name,
+                benefit: item.Earn,
+                benefit_add: item.OffsetEarn,
+                benefit_add_type: item.OffsetPlus == 1 ? '+' : (item.OffsetPlus == 2 ? '-' : '±'),
+                time: item.Expires,
+                atleast: item.BaseLine,
+                atmost: item.Limit,
+                expmoney: 'no',
+                id: item.ID,
+              })
+            })
+            let temp_entrusts_group = {
+              groupname: group.Name,
+              count: group.ItemsIndex.length,
+              items: temp_entrusts_item
+            }
+            temp_entrusts.push(temp_entrusts_group)
+          })
+          this.entrusts = temp_entrusts;
+        } else {
+
+        }
+      }).catch(error => {
+
+      });
+    },
+    init_wallet_data() {
+      this.getWallet({}).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.total_earn = response.data.AllEarn;
+          let temp_assets = [
+            { type: '余币宝', proportion: response.data.Asset[response.data.AssRestIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssRestIndex].Num) },
+            { type: '持有委托', proportion: response.data.Asset[response.data.AssHoldIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssHoldIndex].Num) },
+            { type: '量化', proportion: response.data.Asset[response.data.AssQuanIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssQuanIndex].Num) },
+            { type: '杠杆', proportion: response.data.Asset[response.data.AssLeverIndex].Prop, conceive: this.handle_conceive(response.data.Asset[response.data.AssLeverIndex].Num) }
+          ];
+          let temp_commits = response.data.Items.map(i => {
+            return {
+              type: i.Name,
+              time: i.LastBuyTime,
+              amount: i.LastBuyCount,
+              detail: +i.EnstrustUsed + +i.Count + +i.RestNum,
+              rest: i.RestNum,
+              quan: i.Count,
+              entrust: i.EnstrustUsed,
+              quaning: i.IsQuan
+            }
+          })
+          this.assets = temp_assets;
+          this.commits = temp_commits;
+        } else {
+
+        }
+        this.if_loaded = true;
+      }).catch(error => {
+        this.if_loaded = true;
+      });
+
+    },
     select_entrust(i) {
       if (this.select_entrust_index == i) {
         return;
@@ -594,6 +635,10 @@ export default {
       }
     },
     real_buy() {
+      if (this.IsAccPwdEmpty == 0) {
+        this.$toast('请先设置交易密码');
+        return;
+      }
       this.is_trading = true;
       this.buyEntrust({
         EntrustID: this.current_item.id,
@@ -610,6 +655,7 @@ export default {
           this.confirm_dialog = false;
           this.show_dialog = false;
           this.$toast('投入【' + this.current_item.type + '】成功');
+          this.init_wallet_data();
         } else {
           this.tradeid = '';
           this.tradepwd = '';
@@ -621,7 +667,7 @@ export default {
           this.$toast(response.data.Result.FaultMsg);
         }
       }).catch(error => {
-
+        this.$toast('交易失败');
       })
     },
     get_my_entrusts() {
@@ -664,14 +710,21 @@ export default {
     },
     handle_conceive(i) {
       i += '';
-      console.log(i);
       if (i.length > 6 && i.indexOf('.') > -1) {
         return i.substring(0, i.indexOf('.') + 3);
       } else {
         return i
       }
     },
+    click_copy() {
+      cordova.plugins.clipboard.copy(this.take_in_addr);
+      this.$toast('复制地址成功');
+    },
     take_in() {
+      if (this.IsAccPwdEmpty == 0) {
+        this.$toast('请先设置交易密码');
+        return;
+      }
       this.take_in_id = '';
       this.take_in_count = '';
       this.take_in_addr = '';
@@ -689,6 +742,10 @@ export default {
       })
     },
     take_out() {
+      if (this.IsAccPwdEmpty == 0) {
+        this.$toast('请先设置交易密码');
+        return;
+      }
       this.take_out_id = '';
       this.take_out_count = '';
       this.take_out_addr = '';
@@ -706,6 +763,10 @@ export default {
       })
     },
     real_take_in() {
+      if (this.IsAccPwdEmpty == 0) {
+        this.$toast('请先设置交易密码');
+        return;
+      }
       if (!this.take_in_id || !this.take_in_pwd || !this.take_in_count || !this.take_in_item.CoinID) {
         this.$toast('请输入必填信息');
         return;
@@ -720,6 +781,7 @@ export default {
         if (response.data.Result.Status == 0) {
           this.take_in_dialog = false;
           this.$toast(response.data.Info);
+          this.init_wallet_data();
         } else {
           this.$toast(response.data.Result.FaultMsg)
         }
@@ -730,20 +792,25 @@ export default {
       })
     },
     real_take_out() {
-      if (!this.take_out_id || !this.take_out_pwd || !this.take_out_count || !this.take_out_item.CoinID) {
+      if (this.IsAccPwdEmpty == 0) {
+        this.$toast('请先设置交易密码');
+        return;
+      }
+      if (!this.take_out_pwd || !this.take_out_count || !this.take_out_item.CoinID) {
         this.$toast('请输入必填信息');
         return;
       }
       this.is_trading = true;
       this.enchashment({
         'CoinID': this.take_out_item.CoinID,
-        'DealID': this.take_out_id,
+        // 'DealID': this.take_out_addr,
         'Pwd': this.take_out_pwd,
         'BackNum': this.take_out_count,
       }).then(response => {
         if (response.data.Result.Status == 0) {
           this.take_out_dialog = false;
           this.$toast(response.data.Info);
+          this.init_wallet_data();
         } else {
           this.$toast(response.data.Result.FaultMsg)
         }
@@ -753,6 +820,124 @@ export default {
         this.is_trading = false;
       })
     },
+    start_quan() {
+      if (!this.has_quan_started) {
+        this.$toast('尚未转入，不可开始量化');
+        return;
+      }
+      if (this.start_query_btn == '开始') {
+        this.startQuan({ start: 1 }).then(response => {
+          if (response.data.Status == 0) {
+            this.$toast('开始量化');
+            this.start_query_btn = '结束'
+            this.init_wallet_data();
+          } else {
+            this.$toast(response.data.FaultMsg)
+          }
+        }).catch(error => {
+          this.$toast('开始量化失败');
+        });
+      } else {
+        this.startQuan({ start: 0 }).then(response => {
+          if (response.data.Status == 0) {
+            this.$toast('结束量化');
+            this.start_query_btn = '开始'
+            this.init_wallet_data();
+          } else {
+            this.$toast(response.data.FaultMsg)
+          }
+        }).catch(error => {
+          this.$toast('结束量化失败');
+        });;
+      }
+    },
+    buy_quan(action) {
+      if (this.IsAccPwdEmpty == 0) {
+        this.$toast('请先设置交易密码');
+        return;
+      }
+      this.quan_action = action;
+      this.quan_count = '';
+      this.quan_pwd = '';
+      this.quan_item = '';
+      this.queryRecharge().then(response => {
+        if (response.data.Result.Status == 0) {
+          this.quan_items = response.data.Items;
+          this.quan_dialog = true;
+        } else {
+          this.$toast(response.data.Result.FaultMsg)
+        }
+      }).catch(error => {
+        this.$toast('查询量化类型失败');
+      })
+    },
+    real_buy_quan() {
+      if (!this.quan_pwd || !this.quan_count || !this.quan_item.CoinID) {
+        this.$toast('请输入必填信息');
+        return;
+      }
+      this.is_trading = true;
+      this.transQuan({
+        'Type': this.quan_action == '转入' ? 0 : 1,
+        'CoinID': this.quan_item.CoinID,
+        'Pwd': this.quan_pwd,
+        'AddNum': this.quan_count,
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.quan_dialog = false;
+          this.$toast(response.data.Info);
+          this.init_wallet_data();
+        } else {
+          this.$toast(response.data.Result.FaultMsg)
+        }
+        this.is_trading = false;
+      }).catch(error => {
+        console.log(error)
+        this.$toast('查询失败');
+        this.is_trading = false;
+      })
+    },
+    query_quan() {
+      // let max = 10;
+      // let min = 2;
+      // let random_time = Math.floor(Math.random() * (max - min + 1) + min);
+      this.queryQuan({
+        ReqDate: this.getNowFormatDate(),
+        Page: '0',
+        PageRows: '20',
+      }).then(response => {
+        if (response.data.Result.Status == 0) {
+          this.quan_list = response.data.Items;
+        }
+      });
+      this.query_quan_interval_id = setInterval(() => {
+        this.queryQuan({
+          ReqDate: this.getNowFormatDate(),
+          Page: '0',
+          PageRows: '20',
+        }).then(response => {
+          if (response.data.Result.Status == 0) {
+            this.quan_list = response.data.Items;
+            this.init_wallet_data();
+          }
+        });
+      }, 70 * 1000);
+    },
+    getNowFormatDate() {
+      let date = new Date();
+      let seperator1 = "-";
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      let currentdate = year + seperator1 + month + seperator1 + strDate;
+      return currentdate;
+    }
   }
 }
 
@@ -769,6 +954,10 @@ export default {
 
 .grey-text {
   color: #E0E0E0;
+}
+
+.white-text {
+  color: #F5F5F5;
 }
 
 .buy-text {
@@ -808,4 +997,5 @@ export default {
 .theme--dark .btn {
   color: #212121;
 }
+
 </style>

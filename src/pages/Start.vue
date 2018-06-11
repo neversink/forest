@@ -6,7 +6,7 @@
         <router-view></router-view>
       </transition>
     </v-content>
-    <v-bottom-nav fixed app shift :value="true" :active.sync="current_tab" color="grey darken-4" style="z-index:999">
+    <v-bottom-nav fixed app :value="true" :active.sync="current_tab" color="grey darken-4" style="z-index:999">
       <v-btn flat dark v-for="tab in tabs" :key="tab.name" color="amber lighten-3">
         <span>{{tab.name}}</span>
         <v-icon>{{tab.icon}}</v-icon>

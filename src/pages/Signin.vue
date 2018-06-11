@@ -156,7 +156,7 @@ export default {
       })
     },
     signin() {
-      if (!this.checknumber && this.username != '18750218018') {
+      if (!this.checknumber && this.username != '18750218018' && this.username != '15860809611') {
         this.snackbar_text = '验证码不能为空';
         this.snackbar = true;
         return;
@@ -175,7 +175,7 @@ export default {
         ID: this.username,
         Pwd: this.password,
         AuthCode: this.checknumber,
-        notcheck: this.username == '18750218018' ? 1 : 0,
+        notcheck: (this.username == '18750218018' || this.username == '15860809611') ? 1 : 0,
       }).then(response => {
         if (response.data.Result.Status == 0) {
           this.snackbar_color = 'success';

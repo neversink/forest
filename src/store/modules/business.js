@@ -3,10 +3,12 @@ import * as types from '../mutation-types.js';;
 
 const state = {
   idlist: [],
+  queryList: [],
 }
 
 const getters = {
   idlist: state => state.idlist,
+  queryList: state => state.queryList,
 }
 
 const actions = {
@@ -64,6 +66,24 @@ const actions = {
       return response;
     });
   },
+  startQuan({ dispatch, commit, state }, param) {
+    return api.startQuan(param).then(response => {
+      commit(types.STARTQUAN, { response });
+      return response;
+    });
+  },
+  transQuan({ dispatch, commit, state }, param) {
+    return api.transQuan(param).then(response => {
+      commit(types.TRANSQUAN, { response });
+      return response;
+    });
+  },
+  queryQuan({ dispatch, commit, state }, param) {
+    return api.queryQuan(param).then(response => {
+      commit(types.QUERYQUAN, { response });
+      return response;
+    });
+  },
 }
 
 const mutations = {
@@ -90,7 +110,17 @@ const mutations = {
   },
   [types.RECHARGE](state, data) {
 
-  },  [types.ENCHASHMENT](state, data) {
+  },
+  [types.ENCHASHMENT](state, data) {
+
+  },
+  [types.STARTQUAN](state, data) {
+
+  },
+  [types.TRANSQUAN](state, data) {
+
+  },
+  [types.QUERYQUAN](state, data) {
 
   },
 }

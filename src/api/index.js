@@ -132,6 +132,15 @@ export default {
   enchashment(param) {
     return instance.post('BackFunds', qs.stringify(param))
   },
+  startQuan(param) {
+    return instance.post('HoldProcess', qs.stringify(param))
+  },
+  transQuan(param) {
+    return instance.post('AddQuan', qs.stringify(param))
+  },
+  queryQuan(param) {
+    return instance.post('QuanDetail', qs.stringify(param))
+  },
   // 交易
   getStockInfo() {
     return instance.get('', {

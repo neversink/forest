@@ -19,6 +19,9 @@
   export const QUERY_RECHARGE = 'QUERY_RECHARGE';
   export const RECHARGE = 'RECHARGE';
   export const ENCHASHMENT = 'ENCHASHMENT';
+  export const STARTQUAN = 'STARTQUAN';
+  export const TRANSQUAN = 'TRANSQUAN';
+  export const QUERYQUAN = 'QUERYQUAN';
   // 交易
   export const REVEIVE_MARKET_INFO = 'REVEIVE_MARKET_INFO';
   // 媒体

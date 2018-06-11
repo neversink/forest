@@ -182,19 +182,19 @@ export default {
       })
     },
     signup() {
-      if (!this.checknumber) {
-        this.snackbar_text = '验证码不能为空';
-        this.snackbar = true;
-        return;
-      } else if (!this.username || !this.password) {
-        this.snackbar_text = '用户名和密码不能为空';
-        this.snackbar = true;
-        return;
-      } else if (this.input_error) {
-        this.snackbar_text = '请按照要求输入内容';
-        this.snackbar = true;
-        return;
-      }
+      // if (!this.checknumber) {
+      //   this.snackbar_text = '验证码不能为空';
+      //   this.snackbar = true;
+      //   return;
+      // } else if (!this.username || !this.password) {
+      //   this.snackbar_text = '用户名和密码不能为空';
+      //   this.snackbar = true;
+      //   return;
+      // } else if (this.input_error) {
+      //   this.snackbar_text = '请按照要求输入内容';
+      //   this.snackbar = true;
+      //   return;
+      // }
       this.is_loading = true;
       this.register({
         Type: this.register_type == 'tab-1' ? '2' : '1',
@@ -227,6 +227,7 @@ export default {
           this.is_loading = false;
         }
       }).catch(error => {
+        console.log(error)
         this.snackbar_text = '注册失败';
         this.snackbar = true;
         this.is_loading = false;
