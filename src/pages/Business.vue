@@ -21,8 +21,8 @@
                 <v-card style="background-color:#21212177">
                   <v-container text-xs-center class="pb-0 mb-0">
                     <v-layout justify-center row wrap>
-                      <v-flex xs12 class="caption grey-text">总收益</v-flex>
-                      <v-flex xs12 class="headline gold-text">{{total_earn}}<small>个币</small></v-flex>
+                      <v-flex xs12 class="caption grey-text">收益</v-flex>
+                      <v-flex v-for="i in commits" xs12 class="headline gold-text"><small>{{i.type}} ：{{i.earn}}</small></v-flex>
                       <v-flex xs4 class="my-2 ml-2">
                         <v-btn color="amber lighten-4" @click.native="take_in">
                           充币
@@ -68,11 +68,12 @@
                                   <v-container text-xs-center class="py-0 my-0">
                                     <v-layout justify-center row wrap>
                                       <v-flex xs12 class="title gold-text">{{i.type}}</v-flex>
-                                      <v-flex xs12 class="title gold-text"><small>剩余{{i.time}}天</small></v-flex>
-                                      <v-flex xs6 class="caption grey-text py-0">预期年化</v-flex>
-                                      <v-flex xs6 class="caption grey-text py-0">持有币数</v-flex>
-                                      <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex>
-                                      <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.hold}}</span></v-flex>
+                                      <v-flex xs6 class="caption grey-text py-0"><small>预计年化{{i.benefit}}%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></small></v-flex>
+                                      <v-flex xs6 class="caption grey-text py-0"><small>剩余{{i.time}}天</small></v-flex>
+                                      <!-- <v-flex xs6 class="caption grey-text py-0">预期年化</v-flex> -->
+                                      <v-flex xs12 class="caption gold-text py-0">持有币数</v-flex>
+                                      <!-- <v-flex xs6 class="gold-text py-0"><span class="display-1">{{i.benefit}}</span>%<span v-if="i.benefit_add">{{i.benefit_add_type + i.benefit_add + '%'}}</span></v-flex> -->
+                                      <v-flex xs12 class="gold-text py-0"><span class="display-1">{{i.hold}}</span></v-flex>
                                     </v-layout>
                                   </v-container>
                                 </v-card-title>
@@ -117,7 +118,7 @@
                       <v-list-tile-sub-title><span class="buy-text caption">委托{{ i.entrust }}</span></v-list-tile-sub-title>
                     </v-list-tile-content>
                     <v-list-tile-action>
-                      <span class="caption gold-text">总数{{i.detail}}</span>
+                      <span class="caption gold-text">总数{{i.total}}</span>
                     </v-list-tile-action>
                   </v-list-tile>
                   <v-divider dark inset v-if="index + 1< commits.length" :key="index"></v-divider>
@@ -167,8 +168,8 @@
                 <v-card style="background-color:#21212177">
                   <v-container text-xs-center class="pb-0 mb-0">
                     <v-layout justify-center row wrap>
-                      <v-flex xs12 class="caption grey-text">总收益</v-flex>
-                      <v-flex xs12 class="headline gold-text">{{total_earn}}<small>个币</small></v-flex>
+                      <v-flex xs12 class="caption grey-text">收益</v-flex>
+                      <v-flex v-for="i in commits" xs12 class="headline gold-text"><small>{{i.type}} ：{{i.quan_earn.toFixed(10)}}</small></v-flex>
                       <!--   <v-flex xs6 class="caption grey-text py-0">昨日收益(USDT)</v-flex>
                       <v-flex xs6 class="caption grey-text py-0">总收益(USDT)</v-flex>
                       <v-flex xs6 class="gold-text py-0"><span class="display-1">{{1}}</span>%</v-flex>
@@ -240,7 +241,7 @@
                     </v-flex>
                     </v-flex>
                     <v-flex xs10 class="mx-5">
-                      <v-text-field color="amber lighten-4" :disabled="is_loading" :label="'剩余可投入' + current_item_detail.RestCoinNum + ' ' + current_item_detail.CoinName" dark v-model="trade_amount" type="number"></v-text-field>
+                      <v-text-field color="amber lighten-4" :disabled="is_loading" :label="'剩余可投入' + current_item_detail.RestCoinNum + ' ' + current_item_detail.CoinName" dark v-model="trade_amount"></v-text-field>
                     </v-flex>
                     <v-flex class="quit-button mx-5" xs10>
                       <v-btn class="pb-10" dark block color="amber lighten-4" style="color:black" large :loading="is_loading" :disabled="is_loading" @click.native.stop="ready_buy">立即投入</v-btn>
@@ -555,6 +556,9 @@ export default {
               amount: i.LastBuyCount,
               detail: +i.EnstrustUsed + +i.Count + +i.RestNum,
               rest: i.RestNum,
+              earn: i.AllEarn,
+              quan_earn: i.LastQuanEarn,
+              total: i.Total,
               quan: i.Count,
               entrust: i.EnstrustUsed,
               quaning: i.IsQuan
@@ -803,7 +807,7 @@ export default {
       this.is_trading = true;
       this.enchashment({
         'CoinID': this.take_out_item.CoinID,
-        // 'DealID': this.take_out_addr,
+        'DealID': this.take_out_addr,
         'Pwd': this.take_out_pwd,
         'BackNum': this.take_out_count,
       }).then(response => {

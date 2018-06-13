@@ -10,7 +10,7 @@
                 <!-- 手机 -->
                 <v-icon color="amber lighten-4">phone</v-icon>
               </v-tab>
-              <v-tab href="#tab-2">
+              <v-tab href="#tab-1" @click.native=" $toast('尚不可使用') ">
                 <!-- 邮件 -->
                 <v-icon color="amber lighten-4">mail</v-icon>
               </v-tab>

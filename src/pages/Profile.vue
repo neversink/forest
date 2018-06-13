@@ -2,7 +2,7 @@
   <v-app>
     <div class="main-container">
       <div class="personal-info">
-        <img class="avatar" src="../assets/img/icon.png">
+        <img class="avatar" src="../assets/img/icon.jpeg">
         <!-- <br> -->
         <!-- <br> -->
         <!-- <span class="username gold-text title">{{Nick}}</span> -->
